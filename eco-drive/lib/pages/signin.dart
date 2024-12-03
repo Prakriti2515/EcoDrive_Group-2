@@ -1,14 +1,19 @@
+import 'dart:convert';
+
 import 'package:eco_drive/pages/signup.dart';
 import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
+import 'package:http/http.dart';
 
 class Signin extends StatelessWidget {
-  const Signin({super.key});
-
+  Signin({super.key});
+  TextEditingController email = TextEditingController();
+  TextEditingController password = TextEditingController();
   @override
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
-        backgroundColor: Color(0xffCDC1FF),
+        backgroundColor: Color(0xffffffff),
         body: Padding(
           padding: const EdgeInsets.all(25.0),
           child: Column(
@@ -16,21 +21,48 @@ class Signin extends StatelessWidget {
             children: [
               Center(
                 child: Text(
-                  "Sign In",
+                  "LOGO",
+                  style: TextStyle(fontSize: 30),
+                ),
+              ),
+              Center(
+                child: Text(
+                  "Share Rides,Save Costs",
                   style: TextStyle(
-                    fontWeight: FontWeight.w500,
-                    fontSize: 30,
-                    letterSpacing: 2,
+                    fontSize: 14,
+                    fontWeight: FontWeight.bold,
+                    color: Color(0xff6BCCD8),
                   ),
                 ),
               ),
-              SizedBox(height: 80),
+              SizedBox(height: 20),
+              Text(
+                "Sign In",
+                style: TextStyle(
+                  fontWeight: FontWeight.w500,
+                  fontSize: 30,
+                  letterSpacing: 2,
+                ),
+              ),
+              SizedBox(height: 40),
               Text("Email:"),
               TextField(
+                controller: email,
                 decoration: InputDecoration(
                   hintText: 'Enter your email',
-                  border: OutlineInputBorder(
+                  enabledBorder: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(10),
+                    borderSide: BorderSide(
+                      color: Color(0xff00ACC1),
+                      width: 2.0,
+                    ),
+                  ),
+                  focusedBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(8),
+                    borderSide: BorderSide(
+                      color: Color(0xff00ACC1),
+                      width: 2.0,
+                    ),
                   ),
                   filled: true,
                   fillColor: Colors.white,
@@ -39,27 +71,58 @@ class Signin extends StatelessWidget {
               SizedBox(height: 20),
               Text("Password:"),
               TextField(
+                controller: password,
                 decoration: InputDecoration(
                   hintText: 'Enter your password',
-                  border: OutlineInputBorder(
+                  enabledBorder: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(10),
+                    borderSide: BorderSide(
+                      color: Color(0xff00ACC1),
+                      width: 2.0,
+                    ),
+                  ),
+                  focusedBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(8),
+                    borderSide: BorderSide(
+                      color: Color(0xff00ACC1),
+                      width: 2.0,
+                    ),
                   ),
                   filled: true,
                   fillColor: Colors.white,
                 ),
               ),
-              SizedBox(height: 40),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: [
+                  TextButton(
+                    onPressed: () {},
+                    child: Text(
+                      "Forgot Password?",
+                      style: TextStyle(
+                          fontWeight: FontWeight.w500, color: Colors.black),
+                    ),
+                  ),
+                ],
+              ),
+              SizedBox(height: 30),
               Center(
                 child: ElevatedButton(
-                  onPressed: () {},
+                  onPressed: () {
+                    signin(email.text, password.text);
+                  },
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: Color(0xff407BFF),
-                    padding: EdgeInsets.symmetric(horizontal: 50, vertical: 15),
+                    backgroundColor: Color(0xff00ACC1),
+                    padding: EdgeInsets.symmetric(horizontal: 24, vertical: 12),
+                    minimumSize: Size(250, 50),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(8),
+                    ),
                   ),
                   child: Text(
-                    'CONFIRM',
+                    'SIGN IN',
                     style: TextStyle(
-                      color: Colors.white,
+                      color: Colors.black,
                       fontSize: 16.0,
                     ),
                   ),
@@ -89,7 +152,7 @@ class Signin extends StatelessWidget {
                     foregroundColor: Colors.black,
                     backgroundColor: Colors.white,
                     minimumSize: Size(300, 50),
-                    side: BorderSide(color: Colors.grey),
+                    side: BorderSide(color: Color(0xff00ACC1)),
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(10),
                     )),
@@ -109,7 +172,7 @@ class Signin extends StatelessWidget {
                     foregroundColor: Colors.black,
                     backgroundColor: Colors.white,
                     minimumSize: Size(300, 50),
-                    side: BorderSide(color: Colors.grey),
+                    side: BorderSide(color: Color(0xff00ACC1)),
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(10),
                     )),
@@ -117,7 +180,7 @@ class Signin extends StatelessWidget {
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Image.asset("images/Facebook .png", height: 24),
+                    Image.asset("images/Facebook.png", height: 24),
                     SizedBox(width: 10),
                     Text("Sign up with Facebook"),
                   ],
@@ -151,4 +214,27 @@ class Signin extends StatelessWidget {
       ),
     );
   }
+}
+
+class ApiKeys {
+  static const String apiKey = 'rnd_hSVPkfRmPt3zt7IwvhBsosr2noRN';
+}
+
+void signin(dynamic email, dynamic password) async {
+  var url = 'https://task-4-2.onrender.com/schema/login';
+  var data = {
+    'email': email,
+    'password': password,
+  };
+  var body = json.encode(data);
+  var urlParse = Uri.parse(url);
+  Response response = await http.post(
+    urlParse,
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': 'Bearer ${ApiKeys.apiKey}',
+    },
+    body: body,
+  );
+  print(response.body);
 }

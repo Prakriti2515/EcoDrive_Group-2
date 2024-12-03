@@ -8,18 +8,18 @@ class StartPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
-        backgroundColor: Color(0xffCDC1FF),
+        backgroundColor: Color(0xffC9E8EC),
         body: Padding(
-          padding: const EdgeInsets.all(40.0),
+          padding: const EdgeInsets.only(top: 100.0),
           child: Column(
             children: [
               Center(
                 child: Text(
                   "WELCOME TO",
                   style: TextStyle(
-                    fontWeight: FontWeight.w400,
-                    fontSize: 25,
-                    letterSpacing: 2,
+                    fontWeight: FontWeight.w500,
+                    fontSize: 28,
+                    letterSpacing: 3,
                   ),
                 ),
               ),
@@ -27,31 +27,17 @@ class StartPage extends StatelessWidget {
                 height: 5,
               ),
               Text(
-                "ECO DRIVE!!",
+                "ECO-DRIVE!!",
                 style: TextStyle(
                   fontWeight: FontWeight.bold,
-                  fontSize: 25,
+                  fontSize: 38,
+                  color: Color(0xff00ACC1),
                 ),
               ),
               SizedBox(height: 100),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Stack(
-                    clipBehavior: Clip.none,
-                    children: [
-                      Positioned(
-                        left: 80,
-                        top: -75,
-                        child: Image.asset("images/GPS_Icon.png"),
-                      ),
-                      Image.asset(
-                        "images/Character_1.png",
-                        width: 320.0,
-                      ),
-                    ],
-                  ),
-                ],
+              Image.asset(
+                "images/Character_1.png",
+                width: 320.0,
               ),
               SizedBox(height: 40),
               Text(
@@ -68,7 +54,7 @@ class StartPage extends StatelessWidget {
                   fontSize: 20,
                 ),
               ),
-              SizedBox(height: 200),
+              SizedBox(height: 100),
               ElevatedButton(
                 onPressed: () {
                   Navigator.push(
@@ -77,7 +63,7 @@ class StartPage extends StatelessWidget {
                   );
                 },
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: Color(0xff407BFF),
+                  backgroundColor: Color(0xff00ACC1),
                   padding: EdgeInsets.symmetric(horizontal: 24, vertical: 12),
                   minimumSize: Size(200, 50),
                   shape: RoundedRectangleBorder(
@@ -90,7 +76,7 @@ class StartPage extends StatelessWidget {
                     Text(
                       'NEXT',
                       style: TextStyle(
-                        color: Colors.white,
+                        color: Colors.black,
                         fontSize: 16.0,
                         fontWeight: FontWeight.bold,
                       ),
@@ -98,7 +84,7 @@ class StartPage extends StatelessWidget {
                     SizedBox(width: 8.0),
                     Icon(
                       Icons.arrow_forward,
-                      color: Colors.white,
+                      color: Colors.black,
                     ),
                   ],
                 ),

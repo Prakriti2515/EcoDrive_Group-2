@@ -10,7 +10,7 @@ class Book extends StatelessWidget {
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
-        backgroundColor: Color(0xffCDC1FF),
+        backgroundColor: Color(0xffC9E8EC),
         body: Column(
           children: [
             Padding(
@@ -32,17 +32,19 @@ class Book extends StatelessWidget {
             ),
             SizedBox(height: 30),
             Row(
-              mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Stack(
                   clipBehavior: Clip.none,
                   children: [
                     Positioned(
                       top: 50,
-                      left: -100,
+                      left: 225,
                       child: Image.asset("images/person.png"),
                     ),
-                    Image.asset("images/phone.png"),
+                    Padding(
+                      padding: const EdgeInsets.only(left: 100.0),
+                      child: Image.asset("images/phone.png"),
+                    ),
                   ],
                 ),
               ],
@@ -72,7 +74,7 @@ class Book extends StatelessWidget {
                 );
               },
               style: ElevatedButton.styleFrom(
-                backgroundColor: Color(0xff407BFF),
+                backgroundColor: Color(0xff00ACC1),
                 padding: EdgeInsets.symmetric(horizontal: 24, vertical: 12),
                 minimumSize: Size(200, 50),
                 shape: RoundedRectangleBorder(
@@ -82,7 +84,7 @@ class Book extends StatelessWidget {
               child: Text(
                 'SIGN UP',
                 style: TextStyle(
-                  color: Colors.white,
+                  color: Colors.black,
                   fontSize: 16.0,
                   fontWeight: FontWeight.bold,
                 ),
@@ -97,7 +99,7 @@ class Book extends StatelessWidget {
                 );
               },
               style: ElevatedButton.styleFrom(
-                backgroundColor: Color(0xff407BFF),
+                backgroundColor: Color(0xff00ACC1),
                 padding: EdgeInsets.symmetric(horizontal: 24, vertical: 12),
                 minimumSize: Size(200, 50),
                 shape: RoundedRectangleBorder(
@@ -107,7 +109,7 @@ class Book extends StatelessWidget {
               child: Text(
                 'SIGN IN',
                 style: TextStyle(
-                  color: Colors.white,
+                  color: Colors.black,
                   fontSize: 16.0,
                   fontWeight: FontWeight.bold,
                 ),
