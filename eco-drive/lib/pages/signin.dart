@@ -1,3 +1,5 @@
+// ignore_for_file: must_be_immutable
+
 import 'dart:convert';
 
 import 'package:eco_drive/pages/signup.dart';
@@ -109,7 +111,7 @@ class Signin extends StatelessWidget {
               Center(
                 child: ElevatedButton(
                   onPressed: () {
-                    signin(email.text, password.text);
+                    signin();
                   },
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Color(0xff00ACC1),
@@ -214,27 +216,28 @@ class Signin extends StatelessWidget {
       ),
     );
   }
+
+  void signin() async {
+    var url = 'https://task-4-2.onrender.com/schema/login';
+    var data = {
+      'email': email.text,
+      'password': password.text,
+    };
+    var body = json.encode(data);
+    var urlParse = Uri.parse(url);
+    Response response = await http.post(
+      urlParse,
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer ${ApiKeys.apiKey}',
+      },
+      body: body,
+    );
+    var dataa = jsonDecode(response.body);
+    print(dataa);
+  }
 }
 
 class ApiKeys {
   static const String apiKey = 'rnd_hSVPkfRmPt3zt7IwvhBsosr2noRN';
-}
-
-void signin(dynamic email, dynamic password) async {
-  var url = 'https://task-4-2.onrender.com/schema/login';
-  var data = {
-    'email': email,
-    'password': password,
-  };
-  var body = json.encode(data);
-  var urlParse = Uri.parse(url);
-  Response response = await http.post(
-    urlParse,
-    headers: {
-      'Content-Type': 'application/json',
-      'Authorization': 'Bearer ${ApiKeys.apiKey}',
-    },
-    body: body,
-  );
-  print(response.body);
 }

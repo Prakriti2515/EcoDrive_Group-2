@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'package:eco_drive/pages/signin.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:http/http.dart';
 
 class Signup extends StatefulWidget {
   Signup({super.key});
@@ -153,8 +154,7 @@ class _SignupState extends State<Signup> {
                   child: ElevatedButton(
                     onPressed: () {
                       if (_formKey.currentState!.validate()) {
-                        signup(usernameController.text, emailController.text,
-                            passwordController.text);
+                        signup();
                       }
                     },
                     style: ElevatedButton.styleFrom(
@@ -263,16 +263,16 @@ class _SignupState extends State<Signup> {
     );
   }
 
-  void signup(String email, String password, String username) async {
+  void signup() async {
     var url = 'https://task-4-2.onrender.com/schema/signup';
     var data = {
-      'name': username,
-      'email': email,
-      'password': password,
+      'name': usernameController.text,
+      'email': emailController.text,
+      'password': passwordController.text,
     };
     var body = json.encode(data);
     var urlParse = Uri.parse(url);
-    http.Response response = await http.post(
+    Response response = await http.post(
       urlParse,
       headers: {
         'Content-Type': 'application/json',
@@ -280,20 +280,8 @@ class _SignupState extends State<Signup> {
       },
       body: body,
     );
-    if (response.statusCode == 200) {
-      setState(() {
-        signupMessage = 'Signup successful!';
-      });
-      print('Signup successful');
-    } else {
-      setState(() {
-        signupMessage =
-            jsonDecode(response.body)['message'] ?? 'Unknown error occurred';
-      });
-      print('Error: ${response.body}');
-      print('Response status code: ${response.statusCode}');
-      print('Response body: ${response.body}');
-    }
+    var dataa = jsonDecode(response.body);
+    print(dataa);
   }
 }
 
