@@ -16,7 +16,8 @@ class _SignupState extends State<Signup> {
   TextEditingController usernameController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
   final _formKey = GlobalKey<FormState>();
-  String signupMessage = '';
+
+  String serverMessage = ''; // State variable to store the server message
 
   @override
   Widget build(BuildContext context) {
@@ -150,13 +151,17 @@ class _SignupState extends State<Signup> {
                     },
                   ),
                   SizedBox(height: 20),
-                  Center(
-                    child: Text(
-                      signupMessage,
-                      style: TextStyle(color: Colors.red),
+                  if (serverMessage.isNotEmpty)
+                    Center(
+                      child: Text(
+                        serverMessage,
+                        style: TextStyle(
+                          color: Colors.red,
+                          fontSize: 16,
+                        ),
+                      ),
                     ),
-                  ),
-                  SizedBox(height: 10),
+                  SizedBox(height: 20),
                   Center(
                     child: ElevatedButton(
                       onPressed: () {
@@ -280,16 +285,24 @@ class _SignupState extends State<Signup> {
     };
     var body = json.encode(data);
     var urlParse = Uri.parse(url);
-    Response response = await http.post(
-      urlParse,
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': 'Bearer ${ApiKeys.apiKey}',
-      },
-      body: body,
-    );
-    var dataa = jsonDecode(response.body);
-    print(dataa);
+    try {
+      Response response = await http.post(
+        urlParse,
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': 'Bearer ${ApiKeys.apiKey}',
+        },
+        body: body,
+      );
+      var dataa = jsonDecode(response.body);
+      setState(() {
+        serverMessage = dataa['message'] ?? 'An unexpected error occurred.';
+      });
+    } catch (e) {
+      setState(() {
+        serverMessage = 'Error connecting to the server.';
+      });
+    }
   }
 }
 

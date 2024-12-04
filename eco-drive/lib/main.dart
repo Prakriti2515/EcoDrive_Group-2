@@ -1,6 +1,3 @@
-import 'package:eco_drive/pages/findRide.dart';
-import 'package:eco_drive/pages/homepage.dart';
-import 'package:eco_drive/pages/offerRide.dart';
 import 'package:eco_drive/pages/start.dart';
 import 'package:flutter/material.dart';
 
