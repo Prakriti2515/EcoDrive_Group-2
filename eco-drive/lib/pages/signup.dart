@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:eco_drive/pages/offer.dart';
 import 'package:eco_drive/pages/signin.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
@@ -32,6 +33,15 @@ class _SignupState extends State<Signup> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
+                  GestureDetector(
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => Offer()),
+                      );
+                    },
+                    child: Icon(Icons.arrow_back),
+                  ),
                   Center(
                     child: Text(
                       "LOGO",

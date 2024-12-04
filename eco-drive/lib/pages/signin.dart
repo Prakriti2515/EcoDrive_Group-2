@@ -1,6 +1,8 @@
 import 'dart:convert';
 
 import 'package:eco_drive/pages/homepage.dart';
+import 'package:eco_drive/pages/offer.dart';
+import 'package:eco_drive/pages/password.dart';
 import 'package:eco_drive/pages/signup.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
@@ -15,7 +17,7 @@ class Signin extends StatefulWidget {
 class _SigninState extends State<Signin> {
   TextEditingController email = TextEditingController();
   TextEditingController password = TextEditingController();
-  String errorMessage = ''; // State to store the error message
+  String errorMessage = '';
 
   @override
   Widget build(BuildContext context) {
@@ -27,6 +29,15 @@ class _SigninState extends State<Signin> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
+              GestureDetector(
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => Offer()),
+                  );
+                },
+                child: Icon(Icons.arrow_back),
+              ),
               Center(
                 child: Text(
                   "LOGO",
@@ -105,7 +116,14 @@ class _SigninState extends State<Signin> {
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: [
                   TextButton(
-                    onPressed: () {},
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => Password(),
+                        ),
+                      );
+                    },
                     child: Text(
                       "Forgot Password?",
                       style: TextStyle(
