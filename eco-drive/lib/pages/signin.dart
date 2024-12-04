@@ -1,16 +1,22 @@
-// ignore_for_file: must_be_immutable
-
 import 'dart:convert';
 
+import 'package:eco_drive/pages/homepage.dart';
 import 'package:eco_drive/pages/signup.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
-import 'package:http/http.dart';
 
-class Signin extends StatelessWidget {
+class Signin extends StatefulWidget {
   Signin({super.key});
+
+  @override
+  State<Signin> createState() => _SigninState();
+}
+
+class _SigninState extends State<Signin> {
   TextEditingController email = TextEditingController();
   TextEditingController password = TextEditingController();
+  String errorMessage = ''; // State to store the error message
+
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -74,6 +80,7 @@ class Signin extends StatelessWidget {
               Text("Password:"),
               TextField(
                 controller: password,
+                obscureText: true,
                 decoration: InputDecoration(
                   hintText: 'Enter your password',
                   enabledBorder: OutlineInputBorder(
@@ -107,12 +114,18 @@ class Signin extends StatelessWidget {
                   ),
                 ],
               ),
-              SizedBox(height: 30),
+              SizedBox(height: 10),
+              if (errorMessage.isNotEmpty)
+                Center(
+                  child: Text(
+                    errorMessage,
+                    style: TextStyle(color: Colors.red, fontSize: 16),
+                  ),
+                ),
+              SizedBox(height: 20),
               Center(
                 child: ElevatedButton(
-                  onPressed: () {
-                    signin();
-                  },
+                  onPressed: signin,
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Color(0xff00ACC1),
                     padding: EdgeInsets.symmetric(horizontal: 24, vertical: 12),
@@ -130,7 +143,7 @@ class Signin extends StatelessWidget {
                   ),
                 ),
               ),
-              SizedBox(height: 50),
+              SizedBox(height: 20),
               Row(
                 children: [
                   Expanded(
@@ -148,7 +161,7 @@ class Signin extends StatelessWidget {
                   ),
                 ],
               ),
-              SizedBox(height: 50),
+              SizedBox(height: 30),
               ElevatedButton(
                 style: ElevatedButton.styleFrom(
                     foregroundColor: Colors.black,
@@ -225,16 +238,36 @@ class Signin extends StatelessWidget {
     };
     var body = json.encode(data);
     var urlParse = Uri.parse(url);
-    Response response = await http.post(
-      urlParse,
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': 'Bearer ${ApiKeys.apiKey}',
-      },
-      body: body,
-    );
-    var dataa = jsonDecode(response.body);
-    print(dataa);
+
+    try {
+      var response = await http.post(
+        urlParse,
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': 'Bearer ${ApiKeys.apiKey}',
+        },
+        body: body,
+      );
+
+      var dataa = jsonDecode(response.body);
+      if (response.statusCode == 200 && dataa['status'] == 'success') {
+        setState(() {
+          errorMessage = 'Login Successful';
+        });
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(builder: (context) => Homepage()),
+        );
+      } else {
+        setState(() {
+          errorMessage = dataa['message'] ?? 'Unexpected Error';
+        });
+      }
+    } catch (e) {
+      setState(() {
+        errorMessage = 'Network Error: $e';
+      });
+    }
   }
 }
 

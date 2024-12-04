@@ -112,6 +112,12 @@ class _SignupState extends State<Signup> {
                       filled: true,
                       fillColor: Colors.white,
                     ),
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return 'Please enter your username';
+                      }
+                      return null;
+                    },
                   ),
                   SizedBox(height: 20),
                   Text("Password:"),

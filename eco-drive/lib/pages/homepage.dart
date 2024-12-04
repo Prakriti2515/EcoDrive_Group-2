@@ -1,3 +1,5 @@
+import 'package:eco_drive/pages/findRide.dart';
+import 'package:eco_drive/pages/offerRide.dart';
 import 'package:flutter/material.dart';
 
 class Homepage extends StatefulWidget {
@@ -32,7 +34,12 @@ class _HomepageState extends State<Homepage> {
             SizedBox(height: 80),
             Center(
               child: ElevatedButton(
-                onPressed: () {},
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => Findride()),
+                  );
+                },
                 style: ElevatedButton.styleFrom(
                   backgroundColor: Color(0xff00ACC1),
                   padding: EdgeInsets.symmetric(horizontal: 24, vertical: 12),
@@ -53,7 +60,12 @@ class _HomepageState extends State<Homepage> {
             SizedBox(height: 30),
             Center(
               child: ElevatedButton(
-                onPressed: () {},
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => Offerride()),
+                  );
+                },
                 style: ElevatedButton.styleFrom(
                   backgroundColor: Color(0xff00ACC1),
                   padding: EdgeInsets.symmetric(horizontal: 24, vertical: 12),
