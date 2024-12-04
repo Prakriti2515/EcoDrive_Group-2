@@ -1,6 +1,7 @@
-// import 'package:eco_drive/pages/homepage.dart';
-import 'package:eco_drive/pages/password.dart';
-// import 'package:eco_drive/pages/start.dart';
+import 'package:eco_drive/pages/findRide.dart';
+import 'package:eco_drive/pages/homepage.dart';
+import 'package:eco_drive/pages/offerRide.dart';
+import 'package:eco_drive/pages/start.dart';
 import 'package:flutter/material.dart';
 
 void main() {
@@ -15,7 +16,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Flutter Demo',
-      home: Password(),
+      home: Offerride(),
     );
   }
 }

@@ -67,7 +67,7 @@ class StartPage extends StatelessWidget {
                   padding: EdgeInsets.symmetric(horizontal: 24, vertical: 12),
                   minimumSize: Size(200, 50),
                   shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(8),
+                    borderRadius: BorderRadius.circular(30),
                   ),
                 ),
                 child: Row(
