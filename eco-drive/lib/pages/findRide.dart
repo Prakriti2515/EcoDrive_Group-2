@@ -1,5 +1,3 @@
-import 'dart:math';
-
 import 'package:eco_drive/pages/homepage.dart';
 import 'package:flutter/material.dart';
 

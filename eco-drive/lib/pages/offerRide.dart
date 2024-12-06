@@ -11,6 +11,33 @@ class Offerride extends StatefulWidget {
 class _OfferrideState extends State<Offerride> {
   int? _selectedSeats;
   int? _selectedPrice;
+  DateTime selectedDate = DateTime.now();
+  TimeOfDay selectedTime = TimeOfDay.now();
+  Future<void> _selectDate(BuildContext context) async {
+    final DateTime? picked = await showDatePicker(
+      context: context,
+      initialDate: selectedDate,
+      firstDate: DateTime(2000),
+      lastDate: DateTime(2101),
+    );
+    if (picked != null && picked != selectedDate)
+      setState(() {
+        selectedDate = picked;
+      });
+  }
+
+  Future<void> _selectTime(BuildContext context) async {
+    final TimeOfDay? picked = await showTimePicker(
+      context: context,
+      initialTime: selectedTime,
+    );
+    if (picked != null && picked != selectedTime) {
+      setState(() {
+        selectedTime = picked;
+      });
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -107,22 +134,32 @@ class _OfferrideState extends State<Offerride> {
                 ],
               ),
               SizedBox(height: 40),
-              Row(
-                children: [
-                  Image.asset("images/calendar_today.png"),
-                  SizedBox(width: 8),
-                  Text(
-                    "02 Dec 2024",
-                    style: TextStyle(fontWeight: FontWeight.w300),
-                  ),
-                  Spacer(),
-                  Image.asset("images/Group.png"),
-                  SizedBox(width: 8),
-                  Text(
-                    "01:00pm",
-                    style: TextStyle(fontWeight: FontWeight.w300),
-                  ),
-                ],
+              GestureDetector(
+                onTap: () => _selectDate(context),
+                child: Row(
+                  children: [
+                    Image.asset("images/calendar_today.png"),
+                    SizedBox(width: 8),
+                    Text(
+                      "${selectedDate.toLocal()}".split(' ')[0],
+                      style: TextStyle(fontWeight: FontWeight.w300),
+                    ),
+                    Spacer(),
+                    GestureDetector(
+                      onTap: () => _selectTime(context),
+                      child: Row(
+                        children: [
+                          Image.asset("images/Group.png"),
+                          SizedBox(width: 8),
+                          Text(
+                            "${selectedTime.format(context)}",
+                            style: TextStyle(fontWeight: FontWeight.w300),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
               ),
               SizedBox(height: 6),
               Divider(
