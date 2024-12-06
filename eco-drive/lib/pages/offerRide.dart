@@ -1,9 +1,16 @@
 import 'package:eco_drive/pages/homepage.dart';
 import 'package:flutter/material.dart';
 
-class Offerride extends StatelessWidget {
+class Offerride extends StatefulWidget {
   const Offerride({super.key});
 
+  @override
+  State<Offerride> createState() => _OfferrideState();
+}
+
+class _OfferrideState extends State<Offerride> {
+  int? _selectedSeats;
+  int? _selectedPrice;
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -33,44 +40,71 @@ class Offerride extends StatelessWidget {
                 ),
               ),
               SizedBox(height: 30),
-              TextField(
-                decoration: InputDecoration(
-                  hintText: 'Enter pickup location',
-                  enabledBorder: OutlineInputBorder(
-                    borderSide: BorderSide(
-                      color: Color(0xff00ACC1),
-                      width: 2.0,
+              Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Column(
+                    children: [
+                      SizedBox(height: 10),
+                      Icon(
+                        Icons.circle_outlined,
+                        color: Color(0xff6BCCD8),
+                      ),
+                      Container(
+                        width: 2,
+                        height: 55,
+                        color: Color(0xff6BCCD8),
+                      ),
+                      Icon(Icons.location_pin, color: Color(0xff7C6DDD)),
+                    ],
+                  ),
+                  SizedBox(width: 8),
+                  Expanded(
+                    child: Column(
+                      children: [
+                        TextField(
+                          decoration: InputDecoration(
+                            hintText: 'Enter pickup location',
+                            enabledBorder: OutlineInputBorder(
+                              borderSide: BorderSide(
+                                color: Color(0xff00ACC1),
+                                width: 2.0,
+                              ),
+                            ),
+                            focusedBorder: OutlineInputBorder(
+                              borderSide: BorderSide(
+                                color: Color(0xff00ACC1),
+                                width: 2.0,
+                              ),
+                            ),
+                            filled: true,
+                            fillColor: Colors.white,
+                          ),
+                        ),
+                        SizedBox(height: 20),
+                        TextField(
+                          decoration: InputDecoration(
+                            hintText: 'Enter drop location',
+                            enabledBorder: OutlineInputBorder(
+                              borderSide: BorderSide(
+                                color: Color(0xff00ACC1),
+                                width: 2.0,
+                              ),
+                            ),
+                            focusedBorder: OutlineInputBorder(
+                              borderSide: BorderSide(
+                                color: Color(0xff00ACC1),
+                                width: 2.0,
+                              ),
+                            ),
+                            filled: true,
+                            fillColor: Colors.white,
+                          ),
+                        ),
+                      ],
                     ),
                   ),
-                  focusedBorder: OutlineInputBorder(
-                    borderSide: BorderSide(
-                      color: Color(0xff00ACC1),
-                      width: 2.0,
-                    ),
-                  ),
-                  filled: true,
-                  fillColor: Colors.white,
-                ),
-              ),
-              SizedBox(height: 20),
-              TextField(
-                decoration: InputDecoration(
-                  hintText: 'Enter drop location',
-                  enabledBorder: OutlineInputBorder(
-                    borderSide: BorderSide(
-                      color: Color(0xff00ACC1),
-                      width: 2.0,
-                    ),
-                  ),
-                  focusedBorder: OutlineInputBorder(
-                    borderSide: BorderSide(
-                      color: Color(0xff00ACC1),
-                      width: 2.0,
-                    ),
-                  ),
-                  filled: true,
-                  fillColor: Colors.white,
-                ),
+                ],
               ),
               SizedBox(height: 40),
               Row(
@@ -96,13 +130,62 @@ class Offerride extends StatelessWidget {
               ),
               SizedBox(height: 20),
               Row(
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: [
-                  Image.asset("images/supervisor_account.png"),
-                  SizedBox(width: 8),
-                  Text("Number of passengers"),
+                  Column(
+                    children: [
+                      Text(
+                        "Available seats",
+                        style: TextStyle(
+                          color: Color(0xff00ACC1),
+                        ),
+                      ),
+                      DropdownButton<int>(
+                        value: _selectedSeats,
+                        hint: Text('Seats'),
+                        items: List.generate(10, (index) {
+                          int seatCount = index + 1;
+                          return DropdownMenuItem<int>(
+                            value: seatCount,
+                            child: Text('$seatCount'),
+                          );
+                        }),
+                        onChanged: (value) {
+                          setState(() {
+                            _selectedSeats = value;
+                          });
+                        },
+                      ),
+                    ],
+                  ),
+                  Column(
+                    children: [
+                      Text(
+                        "Price per seats",
+                        style: TextStyle(
+                          color: Color(0xff00ACC1),
+                        ),
+                      ),
+                      DropdownButton<int>(
+                        value: _selectedPrice,
+                        hint: Text('Press to select'),
+                        items: List.generate(6, (index) {
+                          int priceCount = (index + 1) * 50;
+                          return DropdownMenuItem<int>(
+                            value: priceCount,
+                            child: Text('$priceCount'),
+                          );
+                        }),
+                        onChanged: (value) {
+                          setState(() {
+                            _selectedPrice = value;
+                          });
+                        },
+                      ),
+                    ],
+                  ),
                 ],
               ),
-              SizedBox(height: 6),
               Divider(
                 color: Color(0xff00ACC1),
               ),

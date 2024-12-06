@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:eco_drive/pages/homepage.dart';
 import 'package:flutter/material.dart';
 
@@ -33,44 +35,71 @@ class Findride extends StatelessWidget {
                 ),
               ),
               SizedBox(height: 30),
-              TextField(
-                decoration: InputDecoration(
-                  hintText: 'Enter pickup location',
-                  enabledBorder: OutlineInputBorder(
-                    borderSide: BorderSide(
-                      color: Color(0xff00ACC1),
-                      width: 2.0,
+              Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Column(
+                    children: [
+                      SizedBox(height: 10),
+                      Icon(
+                        Icons.circle_outlined,
+                        color: Color(0xff6BCCD8),
+                      ),
+                      Container(
+                        width: 2,
+                        height: 55,
+                        color: Color(0xff6BCCD8),
+                      ),
+                      Icon(Icons.location_pin, color: Color(0xff7C6DDD)),
+                    ],
+                  ),
+                  SizedBox(width: 8),
+                  Expanded(
+                    child: Column(
+                      children: [
+                        TextField(
+                          decoration: InputDecoration(
+                            hintText: 'Enter pickup location',
+                            enabledBorder: OutlineInputBorder(
+                              borderSide: BorderSide(
+                                color: Color(0xff00ACC1),
+                                width: 2.0,
+                              ),
+                            ),
+                            focusedBorder: OutlineInputBorder(
+                              borderSide: BorderSide(
+                                color: Color(0xff00ACC1),
+                                width: 2.0,
+                              ),
+                            ),
+                            filled: true,
+                            fillColor: Colors.white,
+                          ),
+                        ),
+                        SizedBox(height: 20),
+                        TextField(
+                          decoration: InputDecoration(
+                            hintText: 'Enter drop location',
+                            enabledBorder: OutlineInputBorder(
+                              borderSide: BorderSide(
+                                color: Color(0xff00ACC1),
+                                width: 2.0,
+                              ),
+                            ),
+                            focusedBorder: OutlineInputBorder(
+                              borderSide: BorderSide(
+                                color: Color(0xff00ACC1),
+                                width: 2.0,
+                              ),
+                            ),
+                            filled: true,
+                            fillColor: Colors.white,
+                          ),
+                        ),
+                      ],
                     ),
                   ),
-                  focusedBorder: OutlineInputBorder(
-                    borderSide: BorderSide(
-                      color: Color(0xff00ACC1),
-                      width: 2.0,
-                    ),
-                  ),
-                  filled: true,
-                  fillColor: Colors.white,
-                ),
-              ),
-              SizedBox(height: 20),
-              TextField(
-                decoration: InputDecoration(
-                  hintText: 'Enter drop location',
-                  enabledBorder: OutlineInputBorder(
-                    borderSide: BorderSide(
-                      color: Color(0xff00ACC1),
-                      width: 2.0,
-                    ),
-                  ),
-                  focusedBorder: OutlineInputBorder(
-                    borderSide: BorderSide(
-                      color: Color(0xff00ACC1),
-                      width: 2.0,
-                    ),
-                  ),
-                  filled: true,
-                  fillColor: Colors.white,
-                ),
+                ],
               ),
               SizedBox(height: 40),
               Row(
@@ -95,17 +124,19 @@ class Findride extends StatelessWidget {
                 color: Color(0xff00ACC1),
               ),
               SizedBox(height: 20),
-              Row(
-                children: [
-                  Image.asset("images/supervisor_account.png"),
-                  SizedBox(width: 8),
-                  Text("Number of passengers"),
-                ],
+              TextFormField(
+                decoration: InputDecoration(
+                  icon: Icon(Icons.supervisor_account),
+                  hintText: "Number of Passengers",
+                  focusedBorder: UnderlineInputBorder(
+                    borderSide: BorderSide(color: Color(0xff00ACC1)),
+                  ),
+                  enabledBorder: UnderlineInputBorder(
+                    borderSide: BorderSide(color: Color(0xff00ACC1)),
+                  ),
+                ),
               ),
               SizedBox(height: 6),
-              Divider(
-                color: Color(0xff00ACC1),
-              ),
               SizedBox(height: 40),
               Center(
                 child: ElevatedButton(
