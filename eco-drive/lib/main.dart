@@ -1,3 +1,4 @@
+import 'package:eco_drive/pages/findRide.dart';
 import 'package:eco_drive/pages/start.dart';
 import 'package:eco_drive/pages/transport.dart';
 import 'package:flutter/material.dart';
@@ -14,7 +15,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Flutter Demo',
-      home: Transport(),
+      home: Findride(),
     );
   }
 }
