@@ -269,13 +269,16 @@ class _SigninState extends State<Signin> {
 
       var dataa = jsonDecode(response.body);
       if (response.statusCode == 200 && dataa['status'] == 'success') {
+        print('Login successful');
         setState(() {
           errorMessage = 'Login Successful';
         });
-        Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(builder: (context) => Homepage()),
-        );
+        Future.delayed(Duration(milliseconds: 300), () {
+          Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(builder: (context) => Homepage()),
+          );
+        });
       } else {
         setState(() {
           errorMessage = dataa['message'] ?? 'Unexpected Error';
