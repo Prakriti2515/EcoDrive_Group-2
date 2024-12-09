@@ -1,4 +1,6 @@
 import 'package:eco_drive/pages/help.dart';
+import 'package:eco_drive/pages/myProfile.dart';
+import 'package:eco_drive/pages/privacy.dart';
 import 'package:flutter/material.dart';
 
 class Profile extends StatelessWidget {
@@ -50,21 +52,26 @@ class Profile extends StatelessWidget {
                     ListTile(
                       leading: Icon(Icons.person),
                       title: Text('My Profile'),
-                      onTap: () {},
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(builder: (context) => MyProfile()),
+                        );
+                      },
                     ),
                     ListTile(
                       leading: Icon(Icons.description),
                       title: Text('Privacy Policy'),
-                      onTap: () {},
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(builder: (context) => Privacy()),
+                        );
+                      },
                     ),
                     ListTile(
                       leading: Icon(Icons.thumb_up),
                       title: Text('Rate us'),
-                      onTap: () {},
-                    ),
-                    ListTile(
-                      leading: Icon(Icons.language),
-                      title: Text('Change Language'),
                       onTap: () {},
                     ),
                     ListTile(
