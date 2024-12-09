@@ -1,4 +1,3 @@
-import 'package:eco_drive/pages/profile.dart';
 import 'package:flutter/material.dart';
 
 class Privacy extends StatelessWidget {

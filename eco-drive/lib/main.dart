@@ -1,5 +1,3 @@
-import 'package:eco_drive/pages/activity.dart';
-import 'package:eco_drive/pages/homepage.dart';
 import 'package:eco_drive/pages/start.dart';
 import 'package:flutter/material.dart';
 
@@ -16,7 +14,7 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Flutter Demo',
       debugShowCheckedModeBanner: false,
-      home: Homepage(),
+      home: StartPage(),
     );
   }
 }
