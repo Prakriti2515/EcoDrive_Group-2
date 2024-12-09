@@ -90,8 +90,7 @@ class _ActivityState extends State<Activity> {
                       children: [
                         ListTile(
                           leading: CircleAvatar(
-                            backgroundImage:
-                                AssetImage('images/driver_avatar.png'),
+                            backgroundImage: AssetImage('images'),
                           ),
                           title: Text(
                             'Tester Driver',
