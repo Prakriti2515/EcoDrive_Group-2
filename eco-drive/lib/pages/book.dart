@@ -14,7 +14,7 @@ class Book extends StatelessWidget {
         body: Column(
           children: [
             Padding(
-              padding: const EdgeInsets.only(left: 350, top: 10),
+              padding: const EdgeInsets.only(left: 300, top: 10),
               child: TextButton(
                 onPressed: () {
                   Navigator.push(
@@ -65,7 +65,7 @@ class Book extends StatelessWidget {
               child: Text(
                   "Going somewhere? Carpooling is the way to go! Book low cost sharing rides & travel with people going your way"),
             ),
-            SizedBox(height: 80),
+            SizedBox(height: 40),
             ElevatedButton(
               onPressed: () {
                 Navigator.push(

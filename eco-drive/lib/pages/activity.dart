@@ -51,7 +51,7 @@ class _ActivityState extends State<Activity> {
                         ),
                       ),
                     ),
-                    SizedBox(width: 50),
+                    SizedBox(width: 10),
                     TextButton(
                       onPressed: () {
                         setState(() {

@@ -14,7 +14,7 @@ class Offer extends StatelessWidget {
         body: Column(
           children: [
             Padding(
-              padding: const EdgeInsets.only(left: 350, top: 10),
+              padding: const EdgeInsets.only(left: 300, top: 10),
               child: TextButton(
                 onPressed: () {
                   Navigator.push(
@@ -48,7 +48,7 @@ class Offer extends StatelessWidget {
               child: Text(
                   "Driving somewhere? Publish your ride! Choose who goes with you and enjoy the least expensive ride you have ever made"),
             ),
-            SizedBox(height: 80),
+            SizedBox(height: 40),
             ElevatedButton(
               onPressed: () {
                 Navigator.push(
