@@ -1,9 +1,11 @@
+import 'dart:convert';
 import 'package:eco_drive/pages/activity.dart';
 import 'package:eco_drive/pages/chat.dart';
 import 'package:eco_drive/pages/findRide.dart';
 import 'package:eco_drive/pages/offerRide.dart';
 import 'package:eco_drive/pages/profile.dart';
 import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
 
 class Homepage extends StatefulWidget {
   const Homepage({super.key});
@@ -92,6 +94,7 @@ class HomepageContent extends StatelessWidget {
         Center(
           child: ElevatedButton(
             onPressed: () {
+              // Directly navigate to FindRide page when clicked
               Navigator.push(
                 context,
                 MaterialPageRoute(builder: (context) => Findride()),
@@ -118,6 +121,7 @@ class HomepageContent extends StatelessWidget {
         Center(
           child: ElevatedButton(
             onPressed: () {
+              // Directly navigate to OfferRide page when clicked
               Navigator.push(
                 context,
                 MaterialPageRoute(builder: (context) => Offerride()),

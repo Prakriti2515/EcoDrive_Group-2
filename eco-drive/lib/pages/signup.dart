@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'package:eco_drive/pages/offer.dart';
+import 'package:eco_drive/pages/otp.dart';
 import 'package:eco_drive/pages/signin.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
@@ -287,7 +288,7 @@ class _SignupState extends State<Signup> {
   }
 
   void signup() async {
-    var url = 'https://task-4-2.onrender.com/schema/signup';
+    var url = 'http://10.0.2.2:4000/schema/signup'; // Update as needed
     var data = {
       'name': usernameController.text,
       'email': emailController.text,
@@ -295,6 +296,7 @@ class _SignupState extends State<Signup> {
     };
     var body = json.encode(data);
     var urlParse = Uri.parse(url);
+
     try {
       Response response = await http.post(
         urlParse,
@@ -304,10 +306,33 @@ class _SignupState extends State<Signup> {
         },
         body: body,
       );
-      var dataa = jsonDecode(response.body);
-      setState(() {
-        serverMessage = dataa['message'] ?? 'An unexpected error occurred.';
-      });
+      var responseData = jsonDecode(response.body);
+
+      if (response.statusCode == 200 && responseData['success'] == true) {
+        // Extract userId from the response (assuming it's in the responseData)
+        var userId = responseData[
+            'userId']; // Make sure the key matches your backend response
+
+        if (userId != null) {
+          // Navigate to OTP Page with the email and userId
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) =>
+                  OTPPage(email: emailController.text, userId: userId),
+            ),
+          );
+        } else {
+          setState(() {
+            serverMessage = 'No user ID returned. Signup failed.';
+          });
+        }
+      } else {
+        setState(() {
+          serverMessage =
+              responseData['message'] ?? 'Signup failed. Try again.';
+        });
+      }
     } catch (e) {
       setState(() {
         serverMessage = 'Error connecting to the server.';

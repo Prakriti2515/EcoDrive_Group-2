@@ -252,7 +252,8 @@ class _SigninState extends State<Signin> {
   }
 
   void signin() async {
-    var url = 'https://task-4-2.onrender.com/schema/login';
+    var url =
+        'http://10.0.2.2:4000/schema/login'; // Make sure this is the correct URL
     var data = {
       'email': email.text,
       'password': password.text,
@@ -265,23 +266,28 @@ class _SigninState extends State<Signin> {
         urlParse,
         headers: {
           'Content-Type': 'application/json',
-          'Authorization': 'Bearer ${ApiKeys.apiKey}',
+          // If your API requires an Authorization header, you can keep it, or remove if not necessary
+          // 'Authorization': 'Bearer ${ApiKeys.apiKey}',
         },
         body: body,
       );
 
       var dataa = jsonDecode(response.body);
+
+      // Debug the response from the server
+      print('Response data: $dataa');
+
       if (response.statusCode == 200 && dataa['status'] == 'success') {
         print('Login successful');
         setState(() {
           errorMessage = 'Login Successful';
         });
-        Future.delayed(Duration(milliseconds: 300), () {
-          Navigator.pushReplacement(
-            context,
-            MaterialPageRoute(builder: (context) => Homepage()),
-          );
-        });
+
+        // Navigate to Homepage after successful login
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(builder: (context) => Homepage()),
+        );
       } else {
         setState(() {
           errorMessage = dataa['message'] ?? 'Unexpected Error';
