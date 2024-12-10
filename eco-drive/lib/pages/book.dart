@@ -1,6 +1,4 @@
-import 'package:eco_drive/pages/homepage.dart';
 import 'package:eco_drive/pages/signin.dart';
-import 'package:eco_drive/pages/signup.dart';
 import 'package:flutter/material.dart';
 
 class Book extends StatelessWidget {
@@ -19,7 +17,7 @@ class Book extends StatelessWidget {
                 onPressed: () {
                   Navigator.push(
                     context,
-                    MaterialPageRoute(builder: (context) => Homepage()),
+                    MaterialPageRoute(builder: (context) => Signin()),
                   );
                 },
                 child: Text(
@@ -49,7 +47,7 @@ class Book extends StatelessWidget {
                 ),
               ],
             ),
-            SizedBox(height: 90),
+            SizedBox(height: 120),
             Center(
               child: Text(
                 "BOOK A RIDE",
@@ -65,56 +63,55 @@ class Book extends StatelessWidget {
               child: Text(
                   "Going somewhere? Carpooling is the way to go! Book low cost sharing rides & travel with people going your way"),
             ),
-            SizedBox(height: 40),
-            ElevatedButton(
-              onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => Signup()),
-                );
-              },
-              style: ElevatedButton.styleFrom(
-                backgroundColor: Color(0xff00ACC1),
-                padding: EdgeInsets.symmetric(horizontal: 24, vertical: 12),
-                minimumSize: Size(200, 50),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(30),
-                ),
-              ),
-              child: Text(
-                'SIGN UP',
-                style: TextStyle(
-                  color: Colors.black,
-                  fontSize: 16.0,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-            ),
-            SizedBox(height: 20),
-            ElevatedButton(
-              onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => Signin()),
-                );
-              },
-              style: ElevatedButton.styleFrom(
-                backgroundColor: Color(0xff00ACC1),
-                padding: EdgeInsets.symmetric(horizontal: 24, vertical: 12),
-                minimumSize: Size(200, 50),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(30),
-                ),
-              ),
-              child: Text(
-                'SIGN IN',
-                style: TextStyle(
-                  color: Colors.black,
-                  fontSize: 16.0,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-            ),
+            // ElevatedButton(
+            //   onPressed: () {
+            //     Navigator.push(
+            //       context,
+            //       MaterialPageRoute(builder: (context) => Signup()),
+            //     );
+            //   },
+            //   style: ElevatedButton.styleFrom(
+            //     backgroundColor: Color(0xff00ACC1),
+            //     padding: EdgeInsets.symmetric(horizontal: 24, vertical: 12),
+            //     minimumSize: Size(200, 50),
+            //     shape: RoundedRectangleBorder(
+            //       borderRadius: BorderRadius.circular(30),
+            //     ),
+            //   ),
+            //   child: Text(
+            //     'SIGN UP',
+            //     style: TextStyle(
+            //       color: Colors.black,
+            //       fontSize: 16.0,
+            //       fontWeight: FontWeight.bold,
+            //     ),
+            //   ),
+            // ),
+            // SizedBox(height: 20),
+            // ElevatedButton(
+            //   onPressed: () {
+            //     Navigator.push(
+            //       context,
+            //       MaterialPageRoute(builder: (context) => Signin()),
+            //     );
+            //   },
+            //   style: ElevatedButton.styleFrom(
+            //     backgroundColor: Color(0xff00ACC1),
+            //     padding: EdgeInsets.symmetric(horizontal: 24, vertical: 12),
+            //     minimumSize: Size(200, 50),
+            //     shape: RoundedRectangleBorder(
+            //       borderRadius: BorderRadius.circular(30),
+            //     ),
+            //   ),
+            //   child: Text(
+            //     'SIGN IN',
+            //     style: TextStyle(
+            //       color: Colors.black,
+            //       fontSize: 16.0,
+            //       fontWeight: FontWeight.bold,
+            //     ),
+            //   ),
+            // ),
           ],
         ),
       ),

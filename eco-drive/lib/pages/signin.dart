@@ -121,7 +121,9 @@ class _SigninState extends State<Signin> {
                         Navigator.push(
                           context,
                           MaterialPageRoute(
-                            builder: (context) => Password(),
+                            builder: (context) => Password(
+                              token: '',
+                            ),
                           ),
                         );
                       },
@@ -252,8 +254,7 @@ class _SigninState extends State<Signin> {
   }
 
   void signin() async {
-    var url =
-        'https://task-4-2.onrender.com/schema/login'; // Make sure this is the correct URL
+    var url = 'https://task-4-2.onrender.com/schema/login';
     var data = {
       'email': email.text,
       'password': password.text,
@@ -264,39 +265,33 @@ class _SigninState extends State<Signin> {
     try {
       var response = await http.post(
         urlParse,
-        headers: {
-          'Content-Type': 'application/json',
-          // If your API requires an Authorization header, you can keep it, or remove if not necessary
-          // 'Authorization': 'Bearer ${ApiKeys.apiKey}',
-        },
+        headers: {'Content-Type': 'application/json'},
         body: body,
       );
 
-      var dataa = jsonDecode(response.body);
+      var responseData = jsonDecode(response.body);
 
-      // Debug the response from the server
-      print('Response data: $dataa');
+      print('Response Status: ${response.statusCode}');
+      print('Response Data: $responseData');
 
-      if (response.statusCode == 200 && dataa['status'] == 'success') {
+      if (response.statusCode == 200 && responseData['status'] == 'success') {
         print('Login successful');
         setState(() {
-          errorMessage = 'Login Successful';
+          errorMessage = '';
         });
 
-        // Navigate to Homepage after successful login
-        Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(builder: (context) => Homepage()),
-        );
+        Navigator.push(
+            context, MaterialPageRoute(builder: (context) => Homepage()));
       } else {
         setState(() {
-          errorMessage = dataa['message'] ?? 'Unexpected Error';
+          errorMessage = responseData['message'] ?? 'Unexpected Error';
         });
       }
     } catch (e) {
       setState(() {
         errorMessage = 'Network Error: $e';
       });
+      print('Error during sign-in: $e');
     }
   }
 }

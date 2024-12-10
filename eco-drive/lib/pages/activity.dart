@@ -135,7 +135,7 @@ class _ActivityState extends State<Activity> {
                             ),
                             trailing: Column(
                               children: [
-                                Text('\$500',
+                                Text('\u{20B9}${300}',
                                     style: TextStyle(
                                         fontSize: 14,
                                         color: Color(0xff6BCCD8))),

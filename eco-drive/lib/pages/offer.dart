@@ -1,6 +1,4 @@
 import 'package:eco_drive/pages/book.dart';
-import 'package:eco_drive/pages/signin.dart';
-import 'package:eco_drive/pages/signup.dart';
 import 'package:flutter/material.dart';
 
 class Offer extends StatelessWidget {
@@ -48,56 +46,55 @@ class Offer extends StatelessWidget {
               child: Text(
                   "Driving somewhere? Publish your ride! Choose who goes with you and enjoy the least expensive ride you have ever made"),
             ),
-            SizedBox(height: 40),
-            ElevatedButton(
-              onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => Signup()),
-                );
-              },
-              style: ElevatedButton.styleFrom(
-                backgroundColor: Color(0xff00ACC1),
-                padding: EdgeInsets.symmetric(horizontal: 24, vertical: 12),
-                minimumSize: Size(200, 50),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(30),
-                ),
-              ),
-              child: Text(
-                'SIGN UP',
-                style: TextStyle(
-                  color: Colors.black,
-                  fontSize: 16.0,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-            ),
-            SizedBox(height: 20),
-            ElevatedButton(
-              onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => Signin()),
-                );
-              },
-              style: ElevatedButton.styleFrom(
-                backgroundColor: Color(0xff00ACC1),
-                padding: EdgeInsets.symmetric(horizontal: 24, vertical: 12),
-                minimumSize: Size(200, 50),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(30),
-                ),
-              ),
-              child: Text(
-                'SIGN IN',
-                style: TextStyle(
-                  color: Colors.black,
-                  fontSize: 16.0,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-            ),
+            // ElevatedButton(
+            //   onPressed: () {
+            //     Navigator.push(
+            //       context,
+            //       MaterialPageRoute(builder: (context) => Signup()),
+            //     );
+            //   },
+            //   style: ElevatedButton.styleFrom(
+            //     backgroundColor: Color(0xff00ACC1),
+            //     padding: EdgeInsets.symmetric(horizontal: 24, vertical: 12),
+            //     minimumSize: Size(200, 50),
+            //     shape: RoundedRectangleBorder(
+            //       borderRadius: BorderRadius.circular(30),
+            //     ),
+            //   ),
+            //   child: Text(
+            //     'SIGN UP',
+            //     style: TextStyle(
+            //       color: Colors.black,
+            //       fontSize: 16.0,
+            //       fontWeight: FontWeight.bold,
+            //     ),
+            //   ),
+            // ),
+            // SizedBox(height: 20),
+            // ElevatedButton(
+            //   onPressed: () {
+            //     Navigator.push(
+            //       context,
+            //       MaterialPageRoute(builder: (context) => Signin()),
+            //     );
+            //   },
+            //   style: ElevatedButton.styleFrom(
+            //     backgroundColor: Color(0xff00ACC1),
+            //     padding: EdgeInsets.symmetric(horizontal: 24, vertical: 12),
+            //     minimumSize: Size(200, 50),
+            //     shape: RoundedRectangleBorder(
+            //       borderRadius: BorderRadius.circular(30),
+            //     ),
+            //   ),
+            //   child: Text(
+            //     'SIGN IN',
+            //     style: TextStyle(
+            //       color: Colors.black,
+            //       fontSize: 16.0,
+            //       fontWeight: FontWeight.bold,
+            //     ),
+            //   ),
+            // ),
           ],
         ),
       ),

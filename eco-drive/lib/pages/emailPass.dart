@@ -1,72 +1,87 @@
 import 'dart:convert';
-
+import 'package:eco_drive/pages/password.dart';
 import 'package:eco_drive/pages/signin.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 
-class Password extends StatefulWidget {
-  final String token; // Receive token via constructor
-
-  const Password({super.key, required this.token});
+class Emailpass extends StatefulWidget {
+  const Emailpass({super.key});
 
   @override
-  State<Password> createState() => _PasswordState();
+  State<Emailpass> createState() => _EmailpassState();
 }
 
-class _PasswordState extends State<Password> {
-  final TextEditingController passwordController = TextEditingController();
-  String message = ''; // Feedback message
+class _EmailpassState extends State<Emailpass> {
+  final TextEditingController emailController = TextEditingController();
+  String message = ''; // Message to show server response or error
 
-  void resetPassword() async {
-    String newPassword = passwordController.text;
+  void forgotPassword() async {
+    String email = emailController.text;
 
-    // Validate password
-    if (newPassword.isEmpty ||
-        newPassword.length < 8 ||
-        !RegExp(r'(?=.*\d)(?=.*[@$!%*?&])').hasMatch(newPassword)) {
+    if (email.isEmpty || !RegExp(r'^[^@]+@[^@]+\.[^@]+').hasMatch(email)) {
       setState(() {
-        message =
-            'Password must be at least 8 characters long and include a number and a special character.';
+        message = 'Please enter a valid email address.';
       });
       return;
     }
 
     setState(() {
-      message = 'Processing...';
+      message = 'Sending request...';
     });
 
-    var url = 'http://localhost:3000/reset-password/${widget.token}';
-    var data = {'newPassword': newPassword};
+    var url = 'https://task-4-2.onrender.com/schema/forgot-password';
+    var data = {'email': email};
     var body = json.encode(data);
 
     try {
+      print('Sending request to $url with body: $body');
       var response = await http.post(
         Uri.parse(url),
         headers: {'Content-Type': 'application/json'},
         body: body,
       );
 
-      if (response.statusCode == 200) {
-        var responseData = jsonDecode(response.body);
-        setState(() {
-          message = responseData['message'] ?? 'Password reset successfully.';
-        });
+      print('Response status: ${response.statusCode}');
+      print('Response body: ${response.body}');
 
-        // Navigate back to Signin screen
-        Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(builder: (context) => Signin()),
-        );
+      if (response.statusCode == 200) {
+        try {
+          var responseData = jsonDecode(response.body);
+          setState(() {
+            message = responseData['message'] ?? 'Email sent successfully.';
+          });
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => Password(
+                token: responseData['token'],
+              ),
+            ),
+          );
+        } catch (e) {
+          setState(() {
+            message = 'Invalid response from server.';
+          });
+          print('JSON decoding error: $e');
+        }
       } else {
-        var errorData = jsonDecode(response.body);
-        setState(() {
-          message = errorData['message'] ?? 'Failed to reset password.';
-        });
+        try {
+          var errorData = jsonDecode(response.body);
+          setState(() {
+            message = errorData['message'] ?? 'Failed to send email.';
+          });
+        } catch (e) {
+          setState(() {
+            message = 'Unexpected error from server.';
+          });
+          print('Error data decoding: $e');
+        }
       }
     } catch (e) {
       setState(() {
-        message = 'An error occurred. Please try again.';
+        message = 'An error occurred: $e';
       });
+      print('Error: $e');
     }
   }
 
@@ -108,7 +123,7 @@ class _PasswordState extends State<Password> {
               SizedBox(height: 20),
               Center(
                 child: Text(
-                  "Set New Password",
+                  "Verify Email",
                   style: TextStyle(
                     fontWeight: FontWeight.w400,
                     fontSize: 30,
@@ -119,7 +134,7 @@ class _PasswordState extends State<Password> {
               SizedBox(height: 6),
               Center(
                 child: Text(
-                  "Set Your New Password",
+                  "Verify email for new password",
                   style: TextStyle(
                     fontWeight: FontWeight.w300,
                     fontSize: 12,
@@ -128,11 +143,11 @@ class _PasswordState extends State<Password> {
                 ),
               ),
               SizedBox(height: 40),
-              Text("Password:"),
+              Text("Email:"),
               TextField(
-                controller: passwordController,
+                controller: emailController,
                 decoration: InputDecoration(
-                  hintText: 'Enter your new password',
+                  hintText: 'Enter your email',
                   enabledBorder: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(10),
                     borderSide: BorderSide(
@@ -167,7 +182,7 @@ class _PasswordState extends State<Password> {
               SizedBox(height: 60),
               Center(
                 child: ElevatedButton(
-                  onPressed: resetPassword,
+                  onPressed: forgotPassword,
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Color(0xff00ACC1),
                     padding: EdgeInsets.symmetric(horizontal: 24, vertical: 12),

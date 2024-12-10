@@ -263,7 +263,7 @@ class _OfferrideState extends State<Offerride> {
                       DropdownButton<int>(
                         value: _selectedSeats,
                         hint: Text('Seats'),
-                        items: List.generate(10, (index) {
+                        items: List.generate(4, (index) {
                           int seatCount = index + 1;
                           return DropdownMenuItem<int>(
                             value: seatCount,

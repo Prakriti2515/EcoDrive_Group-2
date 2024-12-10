@@ -32,9 +32,9 @@ class _OTPPageState extends State<OTPPage> {
       isLoading = true;
     });
 
-    // Replace the :userId with the actual userId from widget.userId
-    var url = 'https://task-4-2.onrender.com/schema/enter-otp/:userId';
-    var data = {'otp': otp}; // We are passing only the OTP
+    // Replace :userId with the actual userId from widget.userId
+    var url = 'https://task-4-2.onrender.com/schema/enter-otp/${widget.userId}';
+    var data = {'otp': otp}; // Passing only the OTP
     var body = json.encode(data);
     var urlParse = Uri.parse(url);
 
