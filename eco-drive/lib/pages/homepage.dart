@@ -1,11 +1,7 @@
-// homepage.dart
-
 import 'package:flutter/material.dart';
 import 'package:eco_drive/pages/activity.dart';
 import 'package:eco_drive/pages/chat.dart';
 import 'package:eco_drive/pages/profile.dart';
-import 'package:eco_drive/pages/findRide.dart';
-import 'package:eco_drive/pages/offerRide.dart';
 
 class Homepage extends StatefulWidget {
   const Homepage({super.key});
@@ -125,15 +121,10 @@ class HomepageContent extends StatelessWidget {
             ),
           ),
         ),
-        SizedBox(height: 80),
+        SizedBox(height: 150),
         Center(
           child: ElevatedButton(
-            onPressed: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => Findride()),
-              );
-            },
+            onPressed: () {},
             style: ElevatedButton.styleFrom(
               backgroundColor: Color(0xff00ACC1),
               padding: EdgeInsets.symmetric(horizontal: 24, vertical: 12),
@@ -143,41 +134,7 @@ class HomepageContent extends StatelessWidget {
               ),
             ),
             child: Text(
-              'Find a Ride',
-              style: TextStyle(
-                color: Colors.black,
-                fontSize: 16.0,
-              ),
-            ),
-          ),
-        ),
-        SizedBox(height: 30),
-        Center(
-          child: ElevatedButton(
-            onPressed: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => Offerride(
-                    addVehicleCallback: (vehicle) {
-                      // Call the callback function to add the vehicle
-                      // This is passed from the Homepage
-                      // Here, you could also add logic to update the UI
-                    },
-                  ),
-                ),
-              );
-            },
-            style: ElevatedButton.styleFrom(
-              backgroundColor: Color(0xff00ACC1),
-              padding: EdgeInsets.symmetric(horizontal: 24, vertical: 12),
-              minimumSize: Size(250, 50),
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(30),
-              ),
-            ),
-            child: Text(
-              'Offer a Ride',
+              'Select Choice',
               style: TextStyle(
                 color: Colors.black,
                 fontSize: 16.0,
