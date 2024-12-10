@@ -1,11 +1,14 @@
+import 'dart:convert';
 import 'package:eco_drive/pages/homepage.dart';
 import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
 
 class Offerride extends StatefulWidget {
-  const Offerride({super.key});
+  const Offerride(
+      {super.key, required Null Function(dynamic vehicle) addVehicleCallback});
 
   @override
-  State<Offerride> createState() => _OfferrideState();
+  _OfferrideState createState() => _OfferrideState();
 }
 
 class _OfferrideState extends State<Offerride> {
@@ -13,6 +16,14 @@ class _OfferrideState extends State<Offerride> {
   int? _selectedPrice;
   DateTime selectedDate = DateTime.now();
   TimeOfDay selectedTime = TimeOfDay.now();
+
+  TextEditingController pickupController = TextEditingController();
+  TextEditingController dropController = TextEditingController();
+
+  // Success message display
+  String successMessage = '';
+  bool isLoading = false; // Added a variable to show a loading indicator
+
   Future<void> _selectDate(BuildContext context) async {
     final DateTime? picked = await showDatePicker(
       context: context,
@@ -35,6 +46,76 @@ class _OfferrideState extends State<Offerride> {
       setState(() {
         selectedTime = picked;
       });
+    }
+  }
+
+  // Function to send the POST request
+  Future<void> listVehicle() async {
+    setState(() {
+      isLoading = true; // Start loading
+    });
+
+    String fromLocation = pickupController.text;
+    String toLocation = dropController.text;
+    String travelDate =
+        "${selectedDate.year}-${selectedDate.month}-${selectedDate.day}";
+    String travelTime = "${selectedTime.hour}:${selectedTime.minute}";
+    String availableSeats = _selectedSeats.toString();
+
+    var url = Uri.parse(
+        'https://task-4-2.onrender.com/list_vehicle/6756bc7ea9b007bb21ac2f98');
+    var data = {
+      'from': fromLocation,
+      'to': toLocation,
+      'travelDate': travelDate,
+      'travelTime': travelTime,
+      'availableSeats': availableSeats,
+    };
+    var body = json.encode(data);
+
+    try {
+      var response = await http.post(
+        url,
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: body,
+      );
+
+      print("Response Status: ${response.statusCode}");
+      print(
+          "Response Body: ${response.body}"); // Log the response body for debugging
+
+      setState(() {
+        isLoading = false; // Stop loading
+      });
+
+      if (response.statusCode == 200) {
+        // Parse the response
+        var responseData = json.decode(response.body);
+        String message = responseData['message'];
+
+        setState(() {
+          successMessage = message; // Set the success message from the server
+          // Clear the text fields
+          pickupController.clear();
+          dropController.clear();
+          _selectedSeats = null;
+          _selectedPrice = null;
+        });
+      } else {
+        // Handle failure
+        setState(() {
+          successMessage = 'Failed to list vehicle. Please try again later.';
+        });
+        print('Failed to list vehicle: ${response.body}');
+      }
+    } catch (e) {
+      setState(() {
+        isLoading = false; // Stop loading
+        successMessage = 'Network Error: $e';
+      });
+      print('Network Error: $e');
     }
   }
 
@@ -90,6 +171,7 @@ class _OfferrideState extends State<Offerride> {
                     child: Column(
                       children: [
                         TextField(
+                          controller: pickupController,
                           decoration: InputDecoration(
                             hintText: 'Enter pickup location',
                             enabledBorder: OutlineInputBorder(
@@ -110,6 +192,7 @@ class _OfferrideState extends State<Offerride> {
                         ),
                         SizedBox(height: 20),
                         TextField(
+                          controller: dropController,
                           decoration: InputDecoration(
                             hintText: 'Enter drop location',
                             enabledBorder: OutlineInputBorder(
@@ -229,7 +312,7 @@ class _OfferrideState extends State<Offerride> {
               SizedBox(height: 40),
               Center(
                 child: ElevatedButton(
-                  onPressed: () {},
+                  onPressed: isLoading ? null : () => listVehicle(),
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Color(0xff00ACC1),
                     padding: EdgeInsets.symmetric(horizontal: 24, vertical: 12),
@@ -238,15 +321,32 @@ class _OfferrideState extends State<Offerride> {
                       borderRadius: BorderRadius.circular(30),
                     ),
                   ),
+                  child: isLoading
+                      ? CircularProgressIndicator(
+                          color: Colors.black,
+                        )
+                      : Text(
+                          'NEXT',
+                          style: TextStyle(
+                            color: Colors.black,
+                            fontSize: 16.0,
+                          ),
+                        ),
+                ),
+              ),
+              // Display success message
+              if (successMessage.isNotEmpty)
+                Padding(
+                  padding: const EdgeInsets.only(top: 20),
                   child: Text(
-                    'NEXT',
+                    successMessage,
                     style: TextStyle(
-                      color: Colors.black,
-                      fontSize: 16.0,
+                      color: Colors.green,
+                      fontSize: 18,
+                      fontWeight: FontWeight.bold,
                     ),
                   ),
                 ),
-              ),
             ],
           ),
         ),

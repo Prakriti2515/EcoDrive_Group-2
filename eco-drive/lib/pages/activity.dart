@@ -1,8 +1,25 @@
+// activity.dart
+
 import 'package:eco_drive/pages/homepage.dart';
 import 'package:flutter/material.dart';
 
 class Activity extends StatefulWidget {
-  const Activity({super.key});
+  final String fromLocation;
+  final String toLocation;
+  final String travelDate;
+  final String travelTime;
+  final int? availableSeats;
+  final List<Map<String, dynamic>> vehicleList;
+
+  const Activity({
+    super.key,
+    required this.fromLocation,
+    required this.toLocation,
+    required this.travelDate,
+    required this.travelTime,
+    required this.availableSeats,
+    required this.vehicleList,
+  });
 
   @override
   _ActivityState createState() => _ActivityState();
@@ -16,15 +33,12 @@ class _ActivityState extends State<Activity> {
     return SafeArea(
       child: WillPopScope(
         onWillPop: () async {
-          // Navigate to the homepage when back is pressed
           Navigator.pushAndRemoveUntil(
             context,
-            MaterialPageRoute(
-                builder: (context) =>
-                    Homepage()), // Make sure to import the correct homepage
-            (route) => false, // Remove all previous routes
+            MaterialPageRoute(builder: (context) => Homepage()),
+            (route) => false,
           );
-          return Future.value(false); // Prevent the default back action
+          return Future.value(false);
         },
         child: Scaffold(
           body: Padding(
@@ -125,85 +139,8 @@ class _ActivityState extends State<Activity> {
                                     style: TextStyle(
                                         fontSize: 14,
                                         color: Color(0xff6BCCD8))),
-                                Text('1 Seat', style: TextStyle(fontSize: 14)),
-                              ],
-                            ),
-                          ),
-                          Padding(
-                            padding:
-                                const EdgeInsets.symmetric(horizontal: 16.0),
-                            child: Row(
-                              children: [
-                                Column(
-                                  children: [
-                                    Icon(
-                                      Icons.circle_outlined,
-                                      color: Color(0xff6BCCD8),
-                                    ),
-                                    Container(
-                                      width: 2,
-                                      height: 10,
-                                      color: Color(0xff6BCCD8),
-                                    ),
-                                    Icon(Icons.location_pin,
-                                        color: Color(0xff7C6DDD)),
-                                  ],
-                                ),
-                                SizedBox(width: 10),
-                                Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Text(
-                                      'Ghaziabad',
-                                      style: TextStyle(
-                                          fontSize: 16,
-                                          fontWeight: FontWeight.w400),
-                                    ),
-                                    Text(
-                                      'Noida',
-                                      style: TextStyle(
-                                          fontSize: 16,
-                                          fontWeight: FontWeight.w400),
-                                    ),
-                                  ],
-                                ),
-                                Spacer(),
-                                ElevatedButton(
-                                  onPressed: () {},
-                                  style: ElevatedButton.styleFrom(
-                                    backgroundColor: Color(0xff6BCCD8),
-                                    padding: EdgeInsets.symmetric(
-                                        horizontal: 30, vertical: 15),
-                                    shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(20.0),
-                                    ),
-                                  ),
-                                  child: Text(
-                                    'Message',
-                                    style: TextStyle(
-                                        color: Colors.black, fontSize: 16.0),
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.symmetric(horizontal: 16),
-                            child: Row(
-                              children: [
-                                Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Text('11:30 AM, 04 Dec 2024',
-                                        style: TextStyle(
-                                            fontSize: 12,
-                                            color: Color(0xff6BCCD8))),
-                                    Text('Audi A4 | Black',
-                                        style: TextStyle(
-                                            fontSize: 12,
-                                            color: Color(0xff6BCCD8))),
-                                  ],
-                                ),
+                                Text('${widget.availableSeats} Seat(s)',
+                                    style: TextStyle(fontSize: 14)),
                               ],
                             ),
                           ),

@@ -1,5 +1,7 @@
 import 'package:eco_drive/pages/homepage.dart';
 import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
 
 class Findride extends StatefulWidget {
   const Findride({super.key});
@@ -11,6 +13,11 @@ class Findride extends StatefulWidget {
 class _FindrideState extends State<Findride> {
   DateTime selectedDate = DateTime.now();
   TimeOfDay selectedTime = TimeOfDay.now();
+  TextEditingController pickupController = TextEditingController();
+  TextEditingController dropController = TextEditingController();
+  TextEditingController passengersController = TextEditingController();
+  bool isLoading = false;
+
   Future<void> _selectDate(BuildContext context) async {
     final DateTime? picked = await showDatePicker(
       context: context,
@@ -32,6 +39,47 @@ class _FindrideState extends State<Findride> {
     if (picked != null && picked != selectedTime) {
       setState(() {
         selectedTime = picked;
+      });
+    }
+  }
+
+  // Function to perform the search request
+  Future<void> _searchRide() async {
+    print("Search Ride Function Called!"); // Debug message
+
+    setState(() {
+      isLoading = true;
+    });
+
+    String url = 'https://task-4-2.onrender.com/search';
+    Map<String, String> requestBody = {
+      'from': pickupController.text,
+      'to': dropController.text,
+      'travelDate': "${selectedDate.toLocal()}".split(' ')[0],
+      'travelTime': selectedTime.format(context),
+    };
+
+    try {
+      print('Sending request to $url with body: $requestBody');
+
+      final response = await http.post(
+        Uri.parse(url),
+        headers: {'Content-Type': 'application/json'},
+        body: json.encode(requestBody),
+      );
+
+      if (response.statusCode == 200) {
+        print('Response Status: ${response.statusCode}');
+        print('Response Body: ${response.body}');
+      } else {
+        print('Error: ${response.statusCode}');
+        print('Error Body: ${response.body}');
+      }
+    } catch (e) {
+      print('Error: $e');
+    } finally {
+      setState(() {
+        isLoading = false;
       });
     }
   }
@@ -88,6 +136,7 @@ class _FindrideState extends State<Findride> {
                     child: Column(
                       children: [
                         TextField(
+                          controller: pickupController,
                           decoration: InputDecoration(
                             hintText: 'Enter pickup location',
                             enabledBorder: OutlineInputBorder(
@@ -108,6 +157,7 @@ class _FindrideState extends State<Findride> {
                         ),
                         SizedBox(height: 20),
                         TextField(
+                          controller: dropController,
                           decoration: InputDecoration(
                             hintText: 'Enter drop location',
                             enabledBorder: OutlineInputBorder(
@@ -165,6 +215,7 @@ class _FindrideState extends State<Findride> {
               ),
               SizedBox(height: 20),
               TextFormField(
+                controller: passengersController,
                 decoration: InputDecoration(
                   icon: Icon(Icons.supervisor_account),
                   hintText: "Number of Passengers",
@@ -180,7 +231,7 @@ class _FindrideState extends State<Findride> {
               SizedBox(height: 40),
               Center(
                 child: ElevatedButton(
-                  onPressed: () {},
+                  onPressed: isLoading ? null : _searchRide,
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Color(0xff00ACC1),
                     padding: EdgeInsets.symmetric(horizontal: 24, vertical: 12),
@@ -189,13 +240,15 @@ class _FindrideState extends State<Findride> {
                       borderRadius: BorderRadius.circular(30),
                     ),
                   ),
-                  child: Text(
-                    'Find a Ride',
-                    style: TextStyle(
-                      color: Colors.black,
-                      fontSize: 16.0,
-                    ),
-                  ),
+                  child: isLoading
+                      ? CircularProgressIndicator()
+                      : Text(
+                          'Find a Ride',
+                          style: TextStyle(
+                            color: Colors.black,
+                            fontSize: 16.0,
+                          ),
+                        ),
                 ),
               ),
             ],

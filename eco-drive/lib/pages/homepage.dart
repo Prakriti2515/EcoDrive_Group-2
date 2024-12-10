@@ -1,11 +1,11 @@
-import 'dart:convert';
+// homepage.dart
+
+import 'package:flutter/material.dart';
 import 'package:eco_drive/pages/activity.dart';
 import 'package:eco_drive/pages/chat.dart';
+import 'package:eco_drive/pages/profile.dart';
 import 'package:eco_drive/pages/findRide.dart';
 import 'package:eco_drive/pages/offerRide.dart';
-import 'package:eco_drive/pages/profile.dart';
-import 'package:flutter/material.dart';
-import 'package:http/http.dart' as http;
 
 class Homepage extends StatefulWidget {
   const Homepage({super.key});
@@ -17,12 +17,37 @@ class Homepage extends StatefulWidget {
 class _HomepageState extends State<Homepage> {
   int _currentIndex = 0;
 
+  // Dummy vehicle list for Activity page
+  List<Map<String, dynamic>> vehicleList = [
+    {
+      'from': 'Location A',
+      'to': 'Location B',
+      'travelDate': '2024-12-10',
+      'travelTime': '08:00 AM',
+      'availableSeats': 3,
+    },
+  ];
+
   final List<Widget> _pages = [
-    HomepageContent(), // Placeholder for the homepage content
-    Activity(),
+    HomepageContent(),
+    Activity(
+      fromLocation: 'Start Location',
+      toLocation: 'Destination',
+      travelDate: '2024-12-10',
+      travelTime: '08:00 AM',
+      availableSeats: 3,
+      vehicleList: [], // This will be updated in the Homepage state
+    ),
     Chat(),
     Profile(),
   ];
+
+  // Callback function to add vehicle
+  void _addVehicle(Map<String, dynamic> vehicle) {
+    setState(() {
+      vehicleList.add(vehicle);
+    });
+  }
 
   void _onItemTapped(int index) {
     setState(() {
@@ -32,6 +57,16 @@ class _HomepageState extends State<Homepage> {
 
   @override
   Widget build(BuildContext context) {
+    // Update the Activity page with the current vehicle list
+    _pages[1] = Activity(
+      fromLocation: 'Start Location',
+      toLocation: 'Destination',
+      travelDate: '2024-12-10',
+      travelTime: '08:00 AM',
+      availableSeats: 3,
+      vehicleList: vehicleList, // Pass the actual vehicle list here
+    );
+
     return SafeArea(
       child: Scaffold(
         backgroundColor: Color(0xffffffff),
@@ -94,7 +129,6 @@ class HomepageContent extends StatelessWidget {
         Center(
           child: ElevatedButton(
             onPressed: () {
-              // Directly navigate to FindRide page when clicked
               Navigator.push(
                 context,
                 MaterialPageRoute(builder: (context) => Findride()),
@@ -121,10 +155,17 @@ class HomepageContent extends StatelessWidget {
         Center(
           child: ElevatedButton(
             onPressed: () {
-              // Directly navigate to OfferRide page when clicked
               Navigator.push(
                 context,
-                MaterialPageRoute(builder: (context) => Offerride()),
+                MaterialPageRoute(
+                  builder: (context) => Offerride(
+                    addVehicleCallback: (vehicle) {
+                      // Call the callback function to add the vehicle
+                      // This is passed from the Homepage
+                      // Here, you could also add logic to update the UI
+                    },
+                  ),
+                ),
               );
             },
             style: ElevatedButton.styleFrom(
