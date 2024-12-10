@@ -288,7 +288,8 @@ class _SignupState extends State<Signup> {
   }
 
   void signup() async {
-    var url = 'http://10.0.2.2:4000/schema/signup'; // Update as needed
+    var url =
+        'https://task-4-2.onrender.com/schema/signup/'; // Update as needed
     var data = {
       'name': usernameController.text,
       'email': emailController.text,
@@ -307,6 +308,8 @@ class _SignupState extends State<Signup> {
         body: body,
       );
       var responseData = jsonDecode(response.body);
+      print('Response status: ${response.statusCode}');
+      print('Response body: ${response.body}');
 
       if (response.statusCode == 200 && responseData['success'] == true) {
         // Extract userId from the response (assuming it's in the responseData)
