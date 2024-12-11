@@ -7,6 +7,9 @@ import 'package:eco_drive/pages/password.dart';
 import 'package:eco_drive/pages/signup.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:provider/provider.dart';
+
+import 'user_provider.dart';
 
 class Signin extends StatefulWidget {
   Signin({super.key});
@@ -285,21 +288,22 @@ class _SigninState extends State<Signin> {
 
       var responseData = jsonDecode(response.body);
 
-      print('Response Status: ${response.statusCode}');
-      print('Response Data: $responseData');
-
       if (response.statusCode == 200 &&
           responseData['message'] == 'Login successful!') {
-        print('Login successful');
-        setState(() {
-          errorMessage = '';
-        });
+        // Retrieve stored username from UserProvider
+        String username =
+            Provider.of<UserProvider>(context, listen: false).username;
 
+        print('Logged in user: $username'); // Print the username
+
+        // Navigate to homepage
         Navigator.push(
-            context, MaterialPageRoute(builder: (context) => Homepage()));
+          context,
+          MaterialPageRoute(builder: (context) => Homepage()),
+        );
       } else {
         setState(() {
-          errorMessage = responseData['message'] ?? 'Unexpected Error';
+          errorMessage = responseData['message'] ?? 'Login failed';
         });
       }
     } catch (e) {

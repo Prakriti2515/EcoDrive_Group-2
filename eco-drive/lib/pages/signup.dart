@@ -342,7 +342,7 @@ class _SignupState extends State<Signup> {
   void signup() async {
     var url = 'https://task-4-2.onrender.com/schema/signup';
     var data = {
-      'name': usernameController.text,
+      'username': usernameController.text,
       'email': emailController.text,
       'password': passwordController.text,
     };
@@ -350,57 +350,31 @@ class _SignupState extends State<Signup> {
     var urlParse = Uri.parse(url);
 
     try {
-      Response response = await http.post(
+      var response = await http.post(
         urlParse,
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': 'Bearer ${ApiKeys.apiKey}',
-        },
+        headers: {'Content-Type': 'application/json'},
         body: body,
       );
 
       var responseData = jsonDecode(response.body);
-      print('Response status: ${response.statusCode}');
-      print('Response body: ${response.body}');
 
-      String message = responseData['message'] ?? '';
-      String? userId;
+      if (response.statusCode == 200 &&
+          responseData['message'] == 'Signup successful!') {
+        // Store username in provider
+        Provider.of<UserProvider>(context, listen: false)
+            .setUserInfo(usernameController.text, emailController.text);
 
-      if (message.startsWith('Verification email sent')) {
-        List<String> parts = message.split(' ');
-        if (parts.length > 3) {
-          userId = parts.last; // Extract userId
-        }
-      }
-
-      if (response.statusCode == 202 && userId != null) {
-        // Save user data to provider
-        Provider.of<UserProvider>(context, listen: false).setUser(
-          usernameController.text,
-          emailController.text,
-        );
-
-        // Navigate back to homepage
-        Navigator.pushReplacement(
+        Navigator.push(
           context,
-          MaterialPageRoute(
-            builder: (context) => OTPPage(
-              email: '',
-              userId: '',
-            ),
-          ),
+          MaterialPageRoute(builder: (context) => Signin()),
         );
       } else {
         setState(() {
-          serverMessage =
-              responseData['message'] ?? 'Signup failed. Try again.';
+          serverMessage = responseData['message'] ?? 'Signup failed';
         });
       }
     } catch (e) {
-      print('Error: $e');
-      setState(() {
-        serverMessage = 'Error connecting to the server.';
-      });
+      print('Error during signup: $e');
     }
   }
 }

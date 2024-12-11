@@ -18,6 +18,13 @@ class _OTPPageState extends State<OTPPage> {
   final TextEditingController otpController = TextEditingController();
   bool isLoading = false;
 
+  @override
+  void initState() {
+    super.initState();
+    // Debugging the email parameter
+    print('Email passed to OTPPage: ${widget.email}');
+  }
+
   void verifyOTP() async {
     String otp = otpController.text;
 
@@ -32,9 +39,8 @@ class _OTPPageState extends State<OTPPage> {
       isLoading = true;
     });
 
-    // Replace :userId with the actual userId from widget.userId
     var url = 'https://task-4-2.onrender.com/schema/enter-otp/${widget.userId}';
-    var data = {'otp': otp}; // Passing only the OTP
+    var data = {'otp': otp};
     var body = json.encode(data);
     var urlParse = Uri.parse(url);
 
@@ -45,17 +51,18 @@ class _OTPPageState extends State<OTPPage> {
         body: body,
       );
       var responseData = jsonDecode(response.body);
+      print('Response status: ${response.statusCode}');
+      print('Response body: ${response.body}');
 
       setState(() {
         isLoading = false;
       });
 
-      if (response.statusCode == 200 && responseData['success'] == true) {
+      if (response.statusCode == 200 &&
+          responseData['message'] == "OTP Verified") {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(content: Text("OTP Verified!")),
         );
-
-        // Navigate to the Home Page after OTP is verified
         Navigator.pushReplacement(
           context,
           MaterialPageRoute(builder: (context) => Homepage()),
@@ -85,7 +92,7 @@ class _OTPPageState extends State<OTPPage> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Text(
-              "Enter the OTP sent to ${widget.email}",
+              "Enter the OTP sent to ${widget.email}", // Display email
               textAlign: TextAlign.center,
               style: TextStyle(fontSize: 18),
             ),
@@ -96,8 +103,23 @@ class _OTPPageState extends State<OTPPage> {
               maxLength: 6,
               textAlign: TextAlign.center,
               decoration: InputDecoration(
-                hintText: "Enter OTP",
-                border: OutlineInputBorder(),
+                hintText: 'Enter your OTP', // Corrected hintText
+                enabledBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(10),
+                  borderSide: BorderSide(
+                    color: Color(0xff00ACC1),
+                    width: 2.0,
+                  ),
+                ),
+                focusedBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(8),
+                  borderSide: BorderSide(
+                    color: Color(0xff00ACC1),
+                    width: 2.0,
+                  ),
+                ),
+                filled: true,
+                fillColor: Colors.white,
               ),
             ),
             SizedBox(height: 20),
@@ -105,7 +127,22 @@ class _OTPPageState extends State<OTPPage> {
                 ? CircularProgressIndicator()
                 : ElevatedButton(
                     onPressed: verifyOTP,
-                    child: Text("Verify OTP"),
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Color(0xff00ACC1),
+                      padding:
+                          EdgeInsets.symmetric(horizontal: 24, vertical: 12),
+                      minimumSize: Size(250, 50),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(8),
+                      ),
+                    ),
+                    child: Text(
+                      "Verify OTP",
+                      style: TextStyle(
+                        color: Colors.black,
+                        fontSize: 16.0,
+                      ),
+                    ),
                   ),
           ],
         ),

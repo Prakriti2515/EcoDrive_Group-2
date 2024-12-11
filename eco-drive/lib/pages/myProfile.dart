@@ -3,20 +3,22 @@ import 'package:provider/provider.dart';
 import 'user_provider.dart'; // Import your UserProvider
 
 class MyProfile extends StatefulWidget {
-  const MyProfile({super.key, required String email, required String username});
+  final String username;
+  final String email;
+
+  const MyProfile({super.key, required this.username, required this.email});
 
   @override
   _MyProfileState createState() => _MyProfileState();
 }
 
 class _MyProfileState extends State<MyProfile> {
-  // Create TextEditingControllers for Phone Number and Profession
   TextEditingController phoneController = TextEditingController();
   TextEditingController professionController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
-    // Load initial data from the UserProvider if available
+    // Load initial data from the UserProvider
     phoneController.text = Provider.of<UserProvider>(context).phone ?? '';
     professionController.text =
         Provider.of<UserProvider>(context).profession ?? '';
@@ -59,14 +61,11 @@ class _MyProfileState extends State<MyProfile> {
                           radius: 40,
                           backgroundImage: AssetImage('images/Image.png'),
                         ),
-                        title: Consumer<UserProvider>(
-                          builder: (context, userProvider, child) {
-                            return Text(
-                              userProvider.username, // Display username here
-                              style: TextStyle(
-                                  fontSize: 22, fontWeight: FontWeight.bold),
-                            );
-                          },
+                        title: Text(
+                          widget
+                              .username, // Display username passed via Navigator
+                          style: TextStyle(
+                              fontSize: 22, fontWeight: FontWeight.bold),
                         ),
                         subtitle: Row(
                           children: List.generate(
@@ -127,13 +126,9 @@ class _MyProfileState extends State<MyProfile> {
                       ),
                       SizedBox(height: 16.0),
                       Text("Email Address"),
-                      Consumer<UserProvider>(
-                        builder: (context, userProvider, child) {
-                          return Text(
-                            userProvider.email, // Display email here
-                            style: TextStyle(fontSize: 18),
-                          );
-                        },
+                      Text(
+                        widget.email, // Display email passed via Navigator
+                        style: TextStyle(fontSize: 18),
                       ),
                       SizedBox(height: 16.0),
                       Text("Profession"),
@@ -160,17 +155,15 @@ class _MyProfileState extends State<MyProfile> {
                         ),
                       ),
                       SizedBox(height: 16.0),
-                      // Save Button
                       ElevatedButton(
                         onPressed: () {
-                          // Save the updated data
                           String updatedPhone = phoneController.text;
                           String updatedProfession = professionController.text;
 
+                          // Update user info in UserProvider
                           Provider.of<UserProvider>(context, listen: false)
                               .updateUserInfo(updatedPhone, updatedProfession);
 
-                          // Show a snackbar confirmation
                           ScaffoldMessenger.of(context).showSnackBar(
                             SnackBar(
                                 content: Text("Profile updated successfully!")),
@@ -187,7 +180,7 @@ class _MyProfileState extends State<MyProfile> {
                     ],
                   ),
                 ),
-              )
+              ),
             ],
           ),
         ),
