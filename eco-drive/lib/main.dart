@@ -1,10 +1,18 @@
-import 'package:eco_drive/pages/emailPass.dart';
 import 'package:eco_drive/pages/homepage.dart';
 import 'package:eco_drive/pages/start.dart';
+import 'package:eco_drive/pages/user_provider.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 void main() {
-  runApp(const MyApp());
+  runApp(
+    MultiProvider(
+      providers: [
+        ChangeNotifierProvider(create: (_) => UserProvider()),
+      ],
+      child: MyApp(),
+    ),
+  );
 }
 
 class MyApp extends StatelessWidget {
@@ -16,7 +24,7 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Flutter Demo',
       debugShowCheckedModeBanner: false,
-      home: Homepage(),
+      home: StartPage(),
     );
   }
 }

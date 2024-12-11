@@ -104,11 +104,26 @@ class _EmailpassState extends State<Emailpass> {
                 },
                 child: Icon(Icons.arrow_back),
               ),
-              Center(
-                child: Text(
-                  "LOGO",
-                  style: TextStyle(fontSize: 30),
-                ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text(
+                    "ECO",
+                    style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 38,
+                      color: Colors.green,
+                    ),
+                  ),
+                  Text(
+                    "-DRIVE!!",
+                    style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 38,
+                      color: Color(0xff00ACC1),
+                    ),
+                  ),
+                ],
               ),
               Center(
                 child: Text(

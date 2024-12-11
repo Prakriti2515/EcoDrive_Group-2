@@ -26,13 +26,26 @@ class StartPage extends StatelessWidget {
               SizedBox(
                 height: 5,
               ),
-              Text(
-                "ECO-DRIVE!!",
-                style: TextStyle(
-                  fontWeight: FontWeight.bold,
-                  fontSize: 38,
-                  color: Color(0xff00ACC1),
-                ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text(
+                    "ECO",
+                    style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 38,
+                      color: Colors.green,
+                    ),
+                  ),
+                  Text(
+                    "-DRIVE!!",
+                    style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 38,
+                      color: Color(0xff00ACC1),
+                    ),
+                  ),
+                ],
               ),
               SizedBox(height: 100),
               Image.asset(

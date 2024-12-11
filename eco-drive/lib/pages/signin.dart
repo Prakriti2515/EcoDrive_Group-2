@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:eco_drive/pages/emailPass.dart';
 import 'package:eco_drive/pages/homepage.dart';
 import 'package:eco_drive/pages/offer.dart';
 import 'package:eco_drive/pages/password.dart';
@@ -39,11 +40,26 @@ class _SigninState extends State<Signin> {
                   },
                   child: Icon(Icons.arrow_back),
                 ),
-                Center(
-                  child: Text(
-                    "LOGO",
-                    style: TextStyle(fontSize: 30),
-                  ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text(
+                      "ECO",
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 38,
+                        color: Colors.green,
+                      ),
+                    ),
+                    Text(
+                      "-DRIVE!!",
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 38,
+                        color: Color(0xff00ACC1),
+                      ),
+                    ),
+                  ],
                 ),
                 Center(
                   child: Text(
@@ -121,9 +137,7 @@ class _SigninState extends State<Signin> {
                         Navigator.push(
                           context,
                           MaterialPageRoute(
-                            builder: (context) => Password(
-                              token: '',
-                            ),
+                            builder: (context) => Emailpass(),
                           ),
                         );
                       },
@@ -274,7 +288,8 @@ class _SigninState extends State<Signin> {
       print('Response Status: ${response.statusCode}');
       print('Response Data: $responseData');
 
-      if (response.statusCode == 200 && responseData['status'] == 'success') {
+      if (response.statusCode == 200 &&
+          responseData['message'] == 'Login successful!') {
         print('Login successful');
         setState(() {
           errorMessage = '';

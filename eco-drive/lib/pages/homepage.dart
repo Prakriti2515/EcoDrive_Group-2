@@ -1,3 +1,5 @@
+import 'package:eco_drive/pages/findRide.dart';
+import 'package:eco_drive/pages/offerRide.dart';
 import 'package:flutter/material.dart';
 import 'package:eco_drive/pages/activity.dart';
 import 'package:eco_drive/pages/chat.dart';
@@ -124,7 +126,12 @@ class HomepageContent extends StatelessWidget {
         SizedBox(height: 150),
         Center(
           child: ElevatedButton(
-            onPressed: () {},
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => Findride()),
+              );
+            },
             style: ElevatedButton.styleFrom(
               backgroundColor: Color(0xff00ACC1),
               padding: EdgeInsets.symmetric(horizontal: 24, vertical: 12),
@@ -134,7 +141,36 @@ class HomepageContent extends StatelessWidget {
               ),
             ),
             child: Text(
-              'Select Choice',
+              'Find a Ride',
+              style: TextStyle(
+                color: Colors.black,
+                fontSize: 16.0,
+              ),
+            ),
+          ),
+        ),
+        SizedBox(height: 30),
+        Center(
+          child: ElevatedButton(
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (context) => Offerride(
+                          addVehicleCallback: (vehicle) {},
+                        )),
+              );
+            },
+            style: ElevatedButton.styleFrom(
+              backgroundColor: Color(0xff00ACC1),
+              padding: EdgeInsets.symmetric(horizontal: 24, vertical: 12),
+              minimumSize: Size(250, 50),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(30),
+              ),
+            ),
+            child: Text(
+              'Offer a Ride',
               style: TextStyle(
                 color: Colors.black,
                 fontSize: 16.0,

@@ -5,6 +5,9 @@ import 'package:eco_drive/pages/signin.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:http/http.dart';
+import 'package:provider/provider.dart';
+
+import 'user_provider.dart';
 
 class Signup extends StatefulWidget {
   Signup({super.key});
@@ -19,7 +22,27 @@ class _SignupState extends State<Signup> {
   TextEditingController passwordController = TextEditingController();
   final _formKey = GlobalKey<FormState>();
 
-  String serverMessage = ''; // State variable to store the server message
+  String serverMessage = '';
+  String passwordStrengthMessage = '';
+
+  void evaluatePassword(String password) {
+    setState(() {
+      if (password.length < 8) {
+        passwordStrengthMessage =
+            "Password must be at least 8 characters long.";
+      } else if (!RegExp(r'[A-Z]').hasMatch(password)) {
+        passwordStrengthMessage = "Include at least one uppercase letter.";
+      } else if (!RegExp(r'[a-z]').hasMatch(password)) {
+        passwordStrengthMessage = "Include at least one lowercase letter.";
+      } else if (!RegExp(r'\d').hasMatch(password)) {
+        passwordStrengthMessage = "Include at least one digit.";
+      } else if (!RegExp(r'[!@#$%^&*(),.?":{}|<>]').hasMatch(password)) {
+        passwordStrengthMessage = "Include at least one special character.";
+      } else {
+        passwordStrengthMessage = "Strong password!";
+      }
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -43,11 +66,26 @@ class _SignupState extends State<Signup> {
                     },
                     child: Icon(Icons.arrow_back),
                   ),
-                  Center(
-                    child: Text(
-                      "LOGO",
-                      style: TextStyle(fontSize: 30),
-                    ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text(
+                        "ECO",
+                        style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          fontSize: 38,
+                          color: Colors.green,
+                        ),
+                      ),
+                      Text(
+                        "-DRIVE!!",
+                        style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          fontSize: 38,
+                          color: Color(0xff00ACC1),
+                        ),
+                      ),
+                    ],
                   ),
                   Center(
                     child: Text(
@@ -135,6 +173,9 @@ class _SignupState extends State<Signup> {
                   Text("Password:"),
                   TextFormField(
                     controller: passwordController,
+                    onChanged: (value) {
+                      evaluatePassword(value);
+                    },
                     decoration: InputDecoration(
                       hintText: 'Enter your password',
                       enabledBorder: OutlineInputBorder(
@@ -154,12 +195,23 @@ class _SignupState extends State<Signup> {
                       filled: true,
                       fillColor: Colors.white,
                     ),
+                    obscureText: true,
                     validator: (value) {
                       if (value == null || value.isEmpty) {
                         return 'Please enter your password';
                       }
                       return null;
                     },
+                  ),
+                  SizedBox(height: 10),
+                  Text(
+                    passwordStrengthMessage,
+                    style: TextStyle(
+                      color: passwordStrengthMessage == "Strong password!"
+                          ? Colors.green
+                          : Colors.red,
+                      fontSize: 14,
+                    ),
                   ),
                   SizedBox(height: 20),
                   if (serverMessage.isNotEmpty)
@@ -288,8 +340,7 @@ class _SignupState extends State<Signup> {
   }
 
   void signup() async {
-    var url =
-        'https://task-4-2.onrender.com/schema/signup/'; // Update as needed
+    var url = 'https://task-4-2.onrender.com/schema/signup';
     var data = {
       'name': usernameController.text,
       'email': emailController.text,
@@ -307,29 +358,38 @@ class _SignupState extends State<Signup> {
         },
         body: body,
       );
+
       var responseData = jsonDecode(response.body);
       print('Response status: ${response.statusCode}');
       print('Response body: ${response.body}');
 
-      if (response.statusCode == 200 && responseData['success'] == true) {
-        // Extract userId from the response (assuming it's in the responseData)
-        var userId = responseData[
-            'userId']; // Make sure the key matches your backend response
+      String message = responseData['message'] ?? '';
+      String? userId;
 
-        if (userId != null) {
-          // Navigate to OTP Page with the email and userId
-          Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (context) =>
-                  OTPPage(email: emailController.text, userId: userId),
-            ),
-          );
-        } else {
-          setState(() {
-            serverMessage = 'No user ID returned. Signup failed.';
-          });
+      if (message.startsWith('Verification email sent')) {
+        List<String> parts = message.split(' ');
+        if (parts.length > 3) {
+          userId = parts.last; // Extract userId
         }
+      }
+
+      if (response.statusCode == 202 && userId != null) {
+        // Save user data to provider
+        Provider.of<UserProvider>(context, listen: false).setUser(
+          usernameController.text,
+          emailController.text,
+        );
+
+        // Navigate back to homepage
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(
+            builder: (context) => OTPPage(
+              email: '',
+              userId: '',
+            ),
+          ),
+        );
       } else {
         setState(() {
           serverMessage =
@@ -337,6 +397,7 @@ class _SignupState extends State<Signup> {
         });
       }
     } catch (e) {
+      print('Error: $e');
       setState(() {
         serverMessage = 'Error connecting to the server.';
       });

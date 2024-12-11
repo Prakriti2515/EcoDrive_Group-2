@@ -1,10 +1,26 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'user_provider.dart'; // Import your UserProvider
 
-class MyProfile extends StatelessWidget {
-  const MyProfile({super.key});
+class MyProfile extends StatefulWidget {
+  const MyProfile({super.key, required String email, required String username});
+
+  @override
+  _MyProfileState createState() => _MyProfileState();
+}
+
+class _MyProfileState extends State<MyProfile> {
+  // Create TextEditingControllers for Phone Number and Profession
+  TextEditingController phoneController = TextEditingController();
+  TextEditingController professionController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
+    // Load initial data from the UserProvider if available
+    phoneController.text = Provider.of<UserProvider>(context).phone ?? '';
+    professionController.text =
+        Provider.of<UserProvider>(context).profession ?? '';
+
     return SafeArea(
       child: Scaffold(
         body: SingleChildScrollView(
@@ -24,7 +40,7 @@ class MyProfile extends StatelessWidget {
                           children: [
                             GestureDetector(
                               onTap: () {
-                                Navigator.pop(context);
+                                Navigator.pop(context); // Go back to home page
                               },
                               child: Icon(Icons.arrow_back),
                             ),
@@ -41,12 +57,16 @@ class MyProfile extends StatelessWidget {
                       ListTile(
                         leading: CircleAvatar(
                           radius: 40,
-                          backgroundImage: AssetImage('images'),
+                          backgroundImage: AssetImage('images/Image.png'),
                         ),
-                        title: Text(
-                          'Tester Driver',
-                          style: TextStyle(
-                              fontSize: 22, fontWeight: FontWeight.bold),
+                        title: Consumer<UserProvider>(
+                          builder: (context, userProvider, child) {
+                            return Text(
+                              userProvider.username, // Display username here
+                              style: TextStyle(
+                                  fontSize: 22, fontWeight: FontWeight.bold),
+                            );
+                          },
                         ),
                         subtitle: Row(
                           children: List.generate(
@@ -70,11 +90,10 @@ class MyProfile extends StatelessWidget {
                   borderRadius: BorderRadius.circular(20),
                 ),
                 width: 300,
-                height: 400,
+                height: 500, // Increased height for Save button
                 child: Padding(
                   padding: const EdgeInsets.all(30.0),
-                  child: Form(
-                      child: Column(
+                  child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
@@ -85,6 +104,7 @@ class MyProfile extends StatelessWidget {
                       SizedBox(height: 20),
                       Text("Phone Number"),
                       TextField(
+                        controller: phoneController,
                         decoration: InputDecoration(
                           hintText: '+91',
                           enabledBorder: OutlineInputBorder(
@@ -107,30 +127,18 @@ class MyProfile extends StatelessWidget {
                       ),
                       SizedBox(height: 16.0),
                       Text("Email Address"),
-                      TextField(
-                        decoration: InputDecoration(
-                          hintText: 'xyz@email.com',
-                          enabledBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(10),
-                            borderSide: BorderSide(
-                              color: Color(0xff00ACC1),
-                              width: 2.0,
-                            ),
-                          ),
-                          focusedBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(8),
-                            borderSide: BorderSide(
-                              color: Color(0xff00ACC1),
-                              width: 2.0,
-                            ),
-                          ),
-                          filled: true,
-                          fillColor: Colors.white,
-                        ),
+                      Consumer<UserProvider>(
+                        builder: (context, userProvider, child) {
+                          return Text(
+                            userProvider.email, // Display email here
+                            style: TextStyle(fontSize: 18),
+                          );
+                        },
                       ),
                       SizedBox(height: 16.0),
-                      Text("Proffesion"),
+                      Text("Profession"),
                       TextField(
+                        controller: professionController,
                         decoration: InputDecoration(
                           hintText: 'Driver',
                           enabledBorder: OutlineInputBorder(
@@ -151,8 +159,33 @@ class MyProfile extends StatelessWidget {
                           fillColor: Colors.white,
                         ),
                       ),
+                      SizedBox(height: 16.0),
+                      // Save Button
+                      ElevatedButton(
+                        onPressed: () {
+                          // Save the updated data
+                          String updatedPhone = phoneController.text;
+                          String updatedProfession = professionController.text;
+
+                          Provider.of<UserProvider>(context, listen: false)
+                              .updateUserInfo(updatedPhone, updatedProfession);
+
+                          // Show a snackbar confirmation
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBar(
+                                content: Text("Profile updated successfully!")),
+                          );
+                        },
+                        child: Text("Save"),
+                        style: ElevatedButton.styleFrom(
+                          iconColor: Color(0xff00ACC1),
+                          padding: EdgeInsets.symmetric(
+                              horizontal: 40, vertical: 10),
+                          textStyle: TextStyle(fontSize: 18),
+                        ),
+                      ),
                     ],
-                  )),
+                  ),
                 ),
               )
             ],
