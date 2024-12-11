@@ -17,6 +17,7 @@ class _FindrideState extends State<Findride> {
   TextEditingController dropController = TextEditingController();
   TextEditingController passengersController = TextEditingController();
   bool isLoading = false;
+  List<dynamic> availableRides = []; // List to store available rides
 
   Future<void> _selectDate(BuildContext context) async {
     final DateTime? picked = await showDatePicker(
@@ -27,7 +28,7 @@ class _FindrideState extends State<Findride> {
     );
     if (picked != null && picked != selectedDate) {
       setState(() {
-        selectedDate = picked;
+        selectedDate = picked; // Update selectedDate with the picked value
       });
     }
   }
@@ -39,14 +40,13 @@ class _FindrideState extends State<Findride> {
     );
     if (picked != null && picked != selectedTime) {
       setState(() {
-        selectedTime = picked;
+        selectedTime = picked; // Update selectedTime with the picked value
       });
     }
   }
 
-  // Function to perform the search request
   Future<void> _searchRide() async {
-    print("Search Ride Function Called!"); // Debug message
+    print("Search Ride Function Called!");
 
     setState(() {
       isLoading = true;
@@ -72,6 +72,13 @@ class _FindrideState extends State<Findride> {
       if (response.statusCode == 200) {
         print('Response Status: ${response.statusCode}');
         print('Response Body: ${response.body}');
+
+        // Parse the response body and extract the rides
+        Map<String, dynamic> responseBody = json.decode(response.body);
+        setState(() {
+          availableRides =
+              responseBody['ride']; // Update the list of available rides
+        });
       } else {
         print('Error: ${response.statusCode}');
         print('Error Body: ${response.body}');
@@ -90,8 +97,9 @@ class _FindrideState extends State<Findride> {
     return SafeArea(
       child: Scaffold(
         backgroundColor: Color(0xffffffff),
-        body: Padding(
-          padding: const EdgeInsets.only(top: 50.0, left: 30, right: 30),
+        body: SingleChildScrollView(
+          // Add SingleChildScrollView
+          padding: EdgeInsets.only(top: 50.0, left: 30, right: 30),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -252,6 +260,36 @@ class _FindrideState extends State<Findride> {
                         ),
                 ),
               ),
+              SizedBox(height: 30),
+              // Display available rides here
+              if (availableRides.isNotEmpty)
+                Expanded(
+                  child: ListView.builder(
+                    itemCount: availableRides.length,
+                    itemBuilder: (context, index) {
+                      var ride = availableRides[index];
+                      return Card(
+                        margin: EdgeInsets.symmetric(vertical: 10),
+                        child: ListTile(
+                          title: Text("Driver: ${ride['driver']}"),
+                          subtitle: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text("From: ${ride['from']}"),
+                              Text("To: ${ride['to']}"),
+                              Text("Date: ${ride['travelDate']}"),
+                              Text("Time: ${ride['travelTime']}"),
+                              Text(
+                                  "Available Seats: ${ride['availableSeats']}"),
+                            ],
+                          ),
+                        ),
+                      );
+                    },
+                  ),
+                ),
+              if (availableRides.isEmpty && !isLoading)
+                Center(child: Text("No rides found for your search")),
             ],
           ),
         ),
