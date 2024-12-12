@@ -4,22 +4,9 @@ import 'package:eco_drive/pages/homepage.dart';
 import 'package:flutter/material.dart';
 
 class Activity extends StatefulWidget {
-  final String fromLocation;
-  final String toLocation;
-  final String travelDate;
-  final String travelTime;
-  final int? availableSeats;
   final List<Map<String, dynamic>> vehicleList;
 
-  const Activity({
-    super.key,
-    required this.fromLocation,
-    required this.toLocation,
-    required this.travelDate,
-    required this.travelTime,
-    required this.availableSeats,
-    required this.vehicleList,
-  });
+  const Activity({super.key, required this.vehicleList});
 
   @override
   _ActivityState createState() => _ActivityState();
@@ -115,34 +102,22 @@ class _ActivityState extends State<Activity> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         mainAxisSize: MainAxisSize.min,
                         children: [
-                          ListTile(
-                            leading: CircleAvatar(
-                              backgroundImage: AssetImage('images'),
-                            ),
-                            title: Text(
-                              'Tester Driver',
-                              style: TextStyle(fontWeight: FontWeight.bold),
-                            ),
-                            subtitle: Row(
-                              children: List.generate(
-                                5,
-                                (index) => Icon(
-                                  Icons.star,
-                                  color: Colors.orange,
-                                  size: 20,
+                          ListView.builder(
+                            itemCount: widget.vehicleList.length,
+                            itemBuilder: (context, index) {
+                              final vehicle = widget.vehicleList[index];
+                              return Card(
+                                margin: EdgeInsets.all(10),
+                                child: ListTile(
+                                  title: Text(
+                                      '${vehicle['from']} to ${vehicle['to']}'),
+                                  subtitle: Text(
+                                      'Date: ${vehicle['travelDate']} | Time: ${vehicle['travelTime']}'),
+                                  trailing: Text(
+                                      'Seats: ${vehicle['availableSeats']}'),
                                 ),
-                              ),
-                            ),
-                            trailing: Column(
-                              children: [
-                                Text('\u{20B9}${300}',
-                                    style: TextStyle(
-                                        fontSize: 14,
-                                        color: Color(0xff6BCCD8))),
-                                Text('${widget.availableSeats} Seat(s)',
-                                    style: TextStyle(fontSize: 14)),
-                              ],
-                            ),
+                              );
+                            },
                           ),
                         ],
                       ),

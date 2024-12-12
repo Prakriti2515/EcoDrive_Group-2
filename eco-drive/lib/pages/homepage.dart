@@ -15,35 +15,25 @@ class Homepage extends StatefulWidget {
 class _HomepageState extends State<Homepage> {
   int _currentIndex = 0;
 
-  // Dummy vehicle list for Activity page
-  List<Map<String, dynamic>> vehicleList = [
-    {
-      'from': 'Location A',
-      'to': 'Location B',
-      'travelDate': '2024-12-10',
-      'travelTime': '08:00 AM',
-      'availableSeats': 3,
-    },
-  ];
+  List<Map<String, dynamic>> vehicleList = [];
 
-  final List<Widget> _pages = [
-    HomepageContent(),
-    Activity(
-      fromLocation: 'Start Location',
-      toLocation: 'Destination',
-      travelDate: '2024-12-10',
-      travelTime: '08:00 AM',
-      availableSeats: 3,
-      vehicleList: [], // This will be updated in the Homepage state
-    ),
-    Chat(),
-    Profile(),
-  ];
+  final List<Widget> _pages = [];
 
-  // Callback function to add vehicle
+  @override
+  void initState() {
+    super.initState();
+    _pages.addAll([
+      HomepageContent(addVehicleCallback: _addVehicle), // Pass _addVehicle here
+      Activity(vehicleList: vehicleList),
+      Chat(),
+      Profile(),
+    ]);
+  }
+
   void _addVehicle(Map<String, dynamic> vehicle) {
     setState(() {
       vehicleList.add(vehicle);
+      _pages[1] = Activity(vehicleList: vehicleList); // Update Activity
     });
   }
 
@@ -55,16 +45,6 @@ class _HomepageState extends State<Homepage> {
 
   @override
   Widget build(BuildContext context) {
-    // Update the Activity page with the current vehicle list
-    _pages[1] = Activity(
-      fromLocation: 'Start Location',
-      toLocation: 'Destination',
-      travelDate: '2024-12-10',
-      travelTime: '08:00 AM',
-      availableSeats: 3,
-      vehicleList: vehicleList, // Pass the actual vehicle list here
-    );
-
     return SafeArea(
       child: Scaffold(
         backgroundColor: Color(0xffffffff),
@@ -105,6 +85,11 @@ class _HomepageState extends State<Homepage> {
 }
 
 class HomepageContent extends StatelessWidget {
+  final Function(Map<String, dynamic>) addVehicleCallback;
+
+  const HomepageContent({Key? key, required this.addVehicleCallback})
+      : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -156,9 +141,9 @@ class HomepageContent extends StatelessWidget {
               Navigator.push(
                 context,
                 MaterialPageRoute(
-                    builder: (context) => Offerride(
-                          addVehicleCallback: (vehicle) {},
-                        )),
+                  builder: (context) =>
+                      Offerride(addVehicleCallback: addVehicleCallback),
+                ),
               );
             },
             style: ElevatedButton.styleFrom(
