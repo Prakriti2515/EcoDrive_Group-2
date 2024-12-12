@@ -130,7 +130,7 @@ class _SignupState extends State<Signup> {
                       fillColor: Colors.white,
                     ),
                     validator: (value) {
-                      if (value == null || value.isEmpty) {
+                      if (value == null || value.trim().isEmpty) {
                         return 'Please enter your email';
                       } else if (!RegExp(r'^[^@]+@[^@]+\.[^@]+')
                           .hasMatch(value)) {
@@ -342,7 +342,7 @@ class _SignupState extends State<Signup> {
   void signup() async {
     var url = 'https://task-4-2.onrender.com/schema/signup';
     var data = {
-      'username': usernameController.text,
+      'name': usernameController.text,
       'email': emailController.text,
       'password': passwordController.text,
     };
@@ -350,31 +350,55 @@ class _SignupState extends State<Signup> {
     var urlParse = Uri.parse(url);
 
     try {
-      var response = await http.post(
+      Response response = await http.post(
         urlParse,
-        headers: {'Content-Type': 'application/json'},
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': 'Bearer ${ApiKeys.apiKey}',
+        },
         body: body,
       );
 
       var responseData = jsonDecode(response.body);
+      print('Username: ${usernameController.text}');
+      print('Email: ${emailController.text}');
+      print('Password: ${passwordController.text}');
+      print('Request Body: $body');
+      print('Response: ${response.body}');
+      var userId = responseData['userId'];
 
-      if (response.statusCode == 200 &&
-          responseData['message'] == 'Signup successful!') {
-        // Store username in provider
-        Provider.of<UserProvider>(context, listen: false)
-            .setUserInfo(usernameController.text, emailController.text);
-
-        Navigator.push(
+      if (serverMessage != null &&
+          serverMessage.startsWith('Verification email sent')) {
+        List<String> parts = serverMessage.split(' ');
+        if (parts.length > 3) {
+          userId = parts.last; // Extract userId
+        }
+      }
+      if (response.statusCode == 202 && userId != null) {
+        // Save user data to provider
+        Provider.of<UserProvider>(context, listen: false).setUserInfo(
+          usernameController.text,
+          emailController.text,
+        );
+        // Navigate back to homepage
+        Navigator.pushReplacement(
           context,
-          MaterialPageRoute(builder: (context) => Signin()),
+          MaterialPageRoute(
+            builder: (context) =>
+                OTPPage(email: emailController.text, userId: userId),
+          ),
         );
       } else {
         setState(() {
-          serverMessage = responseData['message'] ?? 'Signup failed';
+          serverMessage = responseData['message'] ??
+              'Signup failed. Check required fields.';
         });
       }
     } catch (e) {
-      print('Error during signup: $e');
+      print('Error: $e');
+      setState(() {
+        serverMessage = 'Error connecting to the server.';
+      });
     }
   }
 }
