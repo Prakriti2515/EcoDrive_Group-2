@@ -54,10 +54,11 @@ class _FindrideState extends State<Findride> {
 
     String url = 'https://task-4-2.onrender.com/search';
     Map<String, String> requestBody = {
-      'from': pickupController.text,
-      'to': dropController.text,
+      'from': pickupController.text.trim(),
+      'to': dropController.text.trim(),
       'travelDate': "${selectedDate.toLocal()}".split(' ')[0],
       'travelTime': selectedTime.format(context),
+      'passengers': passengersController.text.trim(), // Optional
     };
 
     try {
@@ -77,7 +78,7 @@ class _FindrideState extends State<Findride> {
         Map<String, dynamic> responseBody = json.decode(response.body);
         setState(() {
           availableRides =
-              responseBody['ride']; // Update the list of available rides
+              responseBody['rides']; // Ensure the server sends rides as a list
         });
       } else {
         print('Error: ${response.statusCode}');
@@ -263,31 +264,34 @@ class _FindrideState extends State<Findride> {
               SizedBox(height: 30),
               // Display available rides here
               if (availableRides.isNotEmpty)
-                Expanded(
-                  child: ListView.builder(
-                    itemCount: availableRides.length,
-                    itemBuilder: (context, index) {
-                      var ride = availableRides[index];
-                      return Card(
-                        margin: EdgeInsets.symmetric(vertical: 10),
-                        child: ListTile(
-                          title: Text("Driver: ${ride['driver']}"),
-                          subtitle: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text("From: ${ride['from']}"),
-                              Text("To: ${ride['to']}"),
-                              Text("Date: ${ride['travelDate']}"),
-                              Text("Time: ${ride['travelTime']}"),
-                              Text(
-                                  "Available Seats: ${ride['availableSeats']}"),
-                            ],
-                          ),
+                ListView.builder(
+                  shrinkWrap: true, // Prevent expanding infinitely
+                  physics:
+                      ClampingScrollPhysics(), // Scroll only within visible bounds
+                  itemCount: availableRides.length,
+                  itemBuilder: (context, index) {
+                    var ride = availableRides[index];
+                    return Card(
+                      margin: EdgeInsets.symmetric(vertical: 10),
+                      child: ListTile(
+                        title: Text("Driver: ${ride['driver']}"),
+                        subtitle: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text("From: ${ride['from']}"),
+                            Text("To: ${ride['to']}"),
+                            Text("Date: ${ride['travelDate']}"),
+                            Text("Time: ${ride['travelTime']}"),
+                            Text("Available Seats: ${ride['availableSeats']}"),
+                          ],
                         ),
-                      );
-                    },
-                  ),
-                ),
+                      ),
+                    );
+                  },
+                )
+              else if (!isLoading)
+                Center(child: Text("No rides found for your search")),
+
               if (availableRides.isEmpty && !isLoading)
                 Center(child: Text("No rides found for your search")),
             ],

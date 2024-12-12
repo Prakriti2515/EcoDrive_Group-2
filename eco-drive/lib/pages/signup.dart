@@ -269,45 +269,6 @@ class _SignupState extends State<Signup> {
                     ],
                   ),
                   SizedBox(height: 30),
-                  ElevatedButton(
-                    style: ElevatedButton.styleFrom(
-                        foregroundColor: Colors.black,
-                        backgroundColor: Colors.white,
-                        minimumSize: Size(300, 50),
-                        side: BorderSide(color: Color(0xff00ACC1)),
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(10),
-                        )),
-                    onPressed: () {},
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Image.asset("images/Google.png", height: 24),
-                        SizedBox(width: 10),
-                        Text("Sign up with Google"),
-                      ],
-                    ),
-                  ),
-                  SizedBox(height: 20),
-                  ElevatedButton(
-                    style: ElevatedButton.styleFrom(
-                        foregroundColor: Colors.black,
-                        backgroundColor: Colors.white,
-                        minimumSize: Size(300, 50),
-                        side: BorderSide(color: Color(0xff00ACC1)),
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(10),
-                        )),
-                    onPressed: () {},
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Image.asset("images/Facebook.png", height: 24),
-                        SizedBox(width: 10),
-                        Text("Sign up with Facebook"),
-                      ],
-                    ),
-                  ),
                   SizedBox(height: 40),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
