@@ -311,7 +311,7 @@ class _SignupState extends State<Signup> {
     var urlParse = Uri.parse(url);
 
     try {
-      Response response = await http.post(
+      var response = await http.post(
         urlParse,
         headers: {
           'Content-Type': 'application/json',
@@ -321,44 +321,47 @@ class _SignupState extends State<Signup> {
       );
 
       var responseData = jsonDecode(response.body);
-      print('Username: ${usernameController.text}');
-      print('Email: ${emailController.text}');
-      print('Password: ${passwordController.text}');
       print('Request Body: $body');
       print('Response: ${response.body}');
-      var userId = responseData['userId'];
 
-      if (serverMessage != null &&
-          serverMessage.startsWith('Verification email sent')) {
-        List<String> parts = serverMessage.split(' ');
-        if (parts.length > 3) {
-          userId = parts.last; // Extract userId
+      String? userId;
+      String? message = responseData['message'];
+
+      // Extract userId if the response message includes it
+      if (message != null && message.startsWith('Verification email sent')) {
+        List<String> parts = message.split(' ');
+        if (parts.isNotEmpty) {
+          userId = parts.last; // Extract userId from the message
         }
       }
+
       if (response.statusCode == 202 && userId != null) {
-        // Save user data to provider
+        // Save user data to the provider
         Provider.of<UserProvider>(context, listen: false).setUserInfo(
           usernameController.text,
           emailController.text,
         );
-        // Navigate back to homepage
+
+        // Navigate to OTPPage
         Navigator.pushReplacement(
           context,
           MaterialPageRoute(
-            builder: (context) =>
-                OTPPage(email: emailController.text, userId: userId),
+            builder: (context) => OTPPage(
+              email: emailController.text,
+              userId: "$userId",
+            ),
           ),
         );
       } else {
         setState(() {
           serverMessage = responseData['message'] ??
-              'Signup failed. Check required fields.';
+              'Signup failed. Please check the fields and try again.';
         });
       }
     } catch (e) {
       print('Error: $e');
       setState(() {
-        serverMessage = 'Error connecting to the server.';
+        serverMessage = 'Error connecting to the server. Please try again.';
       });
     }
   }
